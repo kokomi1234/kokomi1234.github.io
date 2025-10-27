@@ -4,74 +4,342 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="我的个人博客 - 分享技术、生活与思考">
-    <title>我的个人博客</title>
+    <title>我的个人博客 | 全栈开发者</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- 导航栏 -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-brand">
-                <h1>我的博客</h1>
+                <h1><i class="fas fa-code"></i> DevBlog</h1>
             </div>
             <ul class="nav-menu">
                 <li><a href="#home" class="nav-link active">首页</a></li>
                 <li><a href="#about" class="nav-link">关于</a></li>
+                <li><a href="#projects" class="nav-link">项目</a></li>
                 <li><a href="#blog" class="nav-link">博客</a></li>
                 <li><a href="#contact" class="nav-link">联系</a></li>
             </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
         </div>
     </nav>
 
     <!-- 首页Hero部分 -->
     <section id="home" class="hero">
+        <div class="particles" id="particles"></div>
         <div class="container">
             <div class="hero-content">
-                <h2 class="hero-title">你好，我是<span class="highlight">你的名字</span></h2>
-                <p class="hero-subtitle">全栈开发者 | 技术爱好者 | 终身学习者</p>
-                <p class="hero-description">欢迎来到我的个人博客，这里记录我的技术成长、项目经验和生活感悟</p>
+                <div class="hero-badge">
+                    <i class="fas fa-rocket"></i>
+                    <span>欢迎来到我的数字空间</span>
+                </div>
+                <h2 class="hero-title">你好，我是<span class="highlight typing-effect">全栈开发者</span></h2>
+                <p class="hero-subtitle">
+                    <span class="role-text">全栈开发者</span>
+                    <span class="separator">•</span>
+                    <span class="role-text">开源贡献者</span>
+                    <span class="separator">•</span>
+                    <span class="role-text">终身学习者</span>
+                </p>
+                <p class="hero-description">
+                    专注于构建优雅、高效的 Web 应用程序。热衷于探索新技术，分享开发经验，
+                    用代码创造价值，让技术改变生活。
+                </p>
                 <div class="hero-buttons">
-                    <a href="#blog" class="btn btn-primary">阅读博客</a>
-                    <a href="#contact" class="btn btn-secondary">联系我</a>
+                    <a href="#projects" class="btn btn-primary">
+                        <i class="fas fa-folder-open"></i>
+                        查看项目
+                    </a>
+                    <a href="#contact" class="btn btn-secondary">
+                        <i class="fas fa-paper-plane"></i>
+                        联系我
+                    </a>
+                    <a href="#blog" class="btn btn-outline">
+                        <i class="fas fa-book-open"></i>
+                        阅读博客
+                    </a>
+                </div>
+                
+                <!-- 统计数据 -->
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">项目完成</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-number">100+</div>
+                        <div class="stat-label">技术文章</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-number">5k+</div>
+                        <div class="stat-label">代码提交</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-number">3年+</div>
+                        <div class="stat-label">开发经验</div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="scroll-down">
             <i class="fas fa-chevron-down"></i>
         </div>
+        <div class="hero-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
     </section>
 
     <!-- 关于部分 -->
     <section id="about" class="about">
         <div class="container">
-            <h2 class="section-title">关于我</h2>
+            <h2 class="section-title">
+                <span class="title-decorator">关于我</span>
+            </h2>
             <div class="about-content">
-                <div class="about-image">
-                    <img src="images/avatar.jpg" alt="个人头像">
-                </div>
-                <div class="about-text">
-                    <h3>个人简介</h3>
-                    <p>我是一名热爱技术的开发者，专注于Web开发和软件工程。我相信技术可以改变世界，也热衷于通过博客分享我的知识和经验。</p>
-                    <p>在这个博客中，我会分享关于编程、技术趋势、项目实战以及个人成长的内容。希望我的文章能对你有所帮助。</p>
-                    
-                    <div class="skills">
-                        <h4>技能专长</h4>
-                        <div class="skill-tags">
-                            <span class="tag">JavaScript</span>
-                            <span class="tag">Python</span>
-                            <span class="tag">React</span>
-                            <span class="tag">Node.js</span>
-                            <span class="tag">HTML/CSS</span>
-                            <span class="tag">Git</span>
+                <div class="about-left">
+                    <div class="about-image">
+                        <div class="image-wrapper">
+                            <img src="https://ui-avatars.com/api/?name=Dev&size=300&background=6366f1&color=fff&bold=true" alt="个人头像">
+                            <div class="image-border"></div>
+                        </div>
+                        <div class="status-badge">
+                            <span class="status-dot"></span>
+                            可合作
                         </div>
                     </div>
                 </div>
+                
+                <div class="about-right">
+                    <div class="about-text">
+                        <h3>
+                            <i class="fas fa-user-tie"></i>
+                            个人简介
+                        </h3>
+                        <p>我是一名充满热情的<strong>全栈开发者</strong>，拥有多年的 Web 开发经验。我专注于构建现代化、可扩展的应用程序，热衷于学习和应用最新的技术栈。</p>
+                        <p>我相信<em>优秀的代码不仅要功能完善，更要优雅、可维护</em>。在这个博客中，我会分享我的技术见解、项目经验以及对技术趋势的思考。</p>
+                        
+                        <div class="about-highlights">
+                            <div class="highlight-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>3+ 年全栈开发经验</span>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>50+ 成功项目交付</span>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>开源贡献者</span>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>技术博主</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="skills">
+                        <h4>
+                            <i class="fas fa-code"></i>
+                            技能专长
+                        </h4>
+                        <div class="skills-grid">
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">JavaScript / TypeScript</span>
+                                    <span class="skill-percentage">90%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">React / Next.js</span>
+                                    <span class="skill-percentage">85%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">Node.js / Express</span>
+                                    <span class="skill-percentage">80%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 80%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">Python / Django</span>
+                                    <span class="skill-percentage">75%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 75%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">数据库 (SQL/NoSQL)</span>
+                                    <span class="skill-percentage">80%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 80%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">DevOps / CI/CD</span>
+                                    <span class="skill-percentage">70%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 70%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tech-stack">
+                            <span class="tech-tag"><i class="fab fa-html5"></i> HTML5</span>
+                            <span class="tech-tag"><i class="fab fa-css3-alt"></i> CSS3</span>
+                            <span class="tech-tag"><i class="fab fa-js"></i> JavaScript</span>
+                            <span class="tech-tag"><i class="fab fa-react"></i> React</span>
+                            <span class="tech-tag"><i class="fab fa-node-js"></i> Node.js</span>
+                            <span class="tech-tag"><i class="fab fa-python"></i> Python</span>
+                            <span class="tech-tag"><i class="fab fa-git-alt"></i> Git</span>
+                            <span class="tech-tag"><i class="fab fa-docker"></i> Docker</span>
+                            <span class="tech-tag"><i class="fas fa-database"></i> MongoDB</span>
+                            <span class="tech-tag"><i class="fas fa-database"></i> PostgreSQL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 项目展示部分 -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="title-decorator">精选项目</span>
+            </h2>
+            <p class="section-subtitle">以下是我最近完成的一些项目，展示了我的技术能力和创造力</p>
+            
+            <div class="projects-grid">
+                <div class="project-card featured">
+                    <div class="project-image">
+                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop" alt="项目1">
+                        <div class="project-overlay">
+                            <a href="#" class="project-link" title="查看详情">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="#" class="project-link" title="查看代码">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-badge">精选</div>
+                        <h3>智能数据分析平台</h3>
+                        <p>一个功能强大的数据可视化和分析平台，支持实时数据处理和多维度报表生成。</p>
+                        <div class="project-tags">
+                            <span class="project-tag">React</span>
+                            <span class="project-tag">Node.js</span>
+                            <span class="project-tag">MongoDB</span>
+                            <span class="project-tag">D3.js</span>
+                        </div>
+                        <div class="project-meta">
+                            <span><i class="fas fa-star"></i> 234</span>
+                            <span><i class="fas fa-code-branch"></i> 45</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600&h=400&fit=crop" alt="项目2">
+                        <div class="project-overlay">
+                            <a href="#" class="project-link" title="查看详情">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="#" class="project-link" title="查看代码">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3>电商管理系统</h3>
+                        <p>完整的电商后台管理系统，包含订单管理、库存管理、数据统计等功能。</p>
+                        <div class="project-tags">
+                            <span class="project-tag">Vue.js</span>
+                            <span class="project-tag">Express</span>
+                            <span class="project-tag">MySQL</span>
+                        </div>
+                        <div class="project-meta">
+                            <span><i class="fas fa-star"></i> 156</span>
+                            <span><i class="fas fa-code-branch"></i> 32</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=400&fit=crop" alt="项目3">
+                        <div class="project-overlay">
+                            <a href="#" class="project-link" title="查看详情">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="#" class="project-link" title="查看代码">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3>实时聊天应用</h3>
+                        <p>基于 WebSocket 的实时通讯应用，支持群聊、私聊、文件传输等功能。</p>
+                        <div class="project-tags">
+                            <span class="project-tag">React</span>
+                            <span class="project-tag">Socket.io</span>
+                            <span class="project-tag">Redis</span>
+                        </div>
+                        <div class="project-meta">
+                            <span><i class="fas fa-star"></i> 189</span>
+                            <span><i class="fas fa-code-branch"></i> 28</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center" style="margin-top: 3rem;">
+                <a href="https://github.com/kokomi1234" class="btn btn-primary" target="_blank">
+                    <i class="fab fa-github"></i>
+                    查看更多项目
+                </a>
             </div>
         </div>
     </section>
@@ -79,56 +347,212 @@
     <!-- 博客部分 -->
     <section id="blog" class="blog">
         <div class="container">
-            <h2 class="section-title">最新文章</h2>
+            <h2 class="section-title">
+                <span class="title-decorator">最新文章</span>
+            </h2>
+            <p class="section-subtitle">分享我的技术见解、开发经验和学习心得</p>
+            
+            <!-- 博客分类过滤 -->
+            <div class="blog-filters">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-th"></i> 全部
+                </button>
+                <button class="filter-btn" data-filter="技术">
+                    <i class="fas fa-laptop-code"></i> 技术
+                </button>
+                <button class="filter-btn" data-filter="编程">
+                    <i class="fas fa-code"></i> 编程
+                </button>
+                <button class="filter-btn" data-filter="生活">
+                    <i class="fas fa-heart"></i> 生活
+                </button>
+                <button class="filter-btn" data-filter="教程">
+                    <i class="fas fa-book"></i> 教程
+                </button>
+            </div>
+            
             <div class="blog-grid" id="blogGrid">
                 <!-- 博客文章卡片 -->
-                <article class="blog-card">
+                <article class="blog-card" data-category="技术">
                     <div class="blog-image">
-                        <img src="images/blog1.jpg" alt="博客文章图片">
+                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop" alt="博客文章图片">
                         <span class="blog-category">技术</span>
+                        <div class="blog-date">
+                            <span class="date-day">27</span>
+                            <span class="date-month">10月</span>
+                        </div>
                     </div>
                     <div class="blog-content">
-                        <h3 class="blog-title">如何搭建个人博客网站</h3>
+                        <h3 class="blog-title">如何搭建现代化的个人博客</h3>
                         <p class="blog-meta">
-                            <i class="far fa-calendar"></i> 2025-10-27
-                            <i class="far fa-clock"></i> 5分钟阅读
+                            <span><i class="far fa-user"></i> 作者</span>
+                            <span><i class="far fa-clock"></i> 5分钟阅读</span>
+                            <span><i class="far fa-comment"></i> 23</span>
                         </p>
-                        <p class="blog-excerpt">详细介绍如何使用GitHub Pages搭建自己的个人博客网站，从零开始到部署上线...</p>
-                        <a href="#" class="blog-link">阅读更多 <i class="fas fa-arrow-right"></i></a>
+                        <p class="blog-excerpt">详细介绍如何使用现代前端技术栈搭建一个功能完善、设计精美的个人博客网站，从技术选型到部署上线的完整流程...</p>
+                        <div class="blog-tags">
+                            <span class="mini-tag">GitHub Pages</span>
+                            <span class="mini-tag">HTML/CSS</span>
+                            <span class="mini-tag">JavaScript</span>
+                        </div>
+                        <a href="#" class="blog-link">
+                            阅读全文
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 </article>
 
-                <article class="blog-card">
+                <article class="blog-card" data-category="编程">
                     <div class="blog-image">
-                        <img src="images/blog2.jpg" alt="博客文章图片">
+                        <img src="https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=600&h=400&fit=crop" alt="博客文章图片">
                         <span class="blog-category">编程</span>
+                        <div class="blog-date">
+                            <span class="date-day">20</span>
+                            <span class="date-month">10月</span>
+                        </div>
                     </div>
                     <div class="blog-content">
-                        <h3 class="blog-title">JavaScript异步编程深入理解</h3>
+                        <h3 class="blog-title">JavaScript 异步编程完全指南</h3>
                         <p class="blog-meta">
-                            <i class="far fa-calendar"></i> 2025-10-20
-                            <i class="far fa-clock"></i> 8分钟阅读
+                            <span><i class="far fa-user"></i> 作者</span>
+                            <span><i class="far fa-clock"></i> 8分钟阅读</span>
+                            <span><i class="far fa-comment"></i> 45</span>
                         </p>
-                        <p class="blog-excerpt">深入探讨JavaScript中的异步编程，包括Promise、async/await等核心概念...</p>
-                        <a href="#" class="blog-link">阅读更多 <i class="fas fa-arrow-right"></i></a>
+                        <p class="blog-excerpt">深入探讨 JavaScript 异步编程的核心概念，包括 Promise、async/await、事件循环等，帮助你彻底理解异步编程...</p>
+                        <div class="blog-tags">
+                            <span class="mini-tag">JavaScript</span>
+                            <span class="mini-tag">Promise</span>
+                            <span class="mini-tag">Async</span>
+                        </div>
+                        <a href="#" class="blog-link">
+                            阅读全文
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 </article>
 
-                <article class="blog-card">
+                <article class="blog-card" data-category="教程">
                     <div class="blog-image">
-                        <img src="images/blog3.jpg" alt="博客文章图片">
+                        <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=600&h=400&fit=crop" alt="博客文章图片">
+                        <span class="blog-category">教程</span>
+                        <div class="blog-date">
+                            <span class="date-day">15</span>
+                            <span class="date-month">10月</span>
+                        </div>
+                    </div>
+                    <div class="blog-content">
+                        <h3 class="blog-title">React Hooks 实战技巧</h3>
+                        <p class="blog-meta">
+                            <span><i class="far fa-user"></i> 作者</span>
+                            <span><i class="far fa-clock"></i> 10分钟阅读</span>
+                            <span><i class="far fa-comment"></i> 67</span>
+                        </p>
+                        <p class="blog-excerpt">通过实际项目案例，学习如何正确使用 React Hooks，避免常见陷阱，提升应用性能和代码质量...</p>
+                        <div class="blog-tags">
+                            <span class="mini-tag">React</span>
+                            <span class="mini-tag">Hooks</span>
+                            <span class="mini-tag">前端</span>
+                        </div>
+                        <a href="#" class="blog-link">
+                            阅读全文
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="blog-card" data-category="生活">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=600&h=400&fit=crop" alt="博客文章图片">
                         <span class="blog-category">生活</span>
+                        <div class="blog-date">
+                            <span class="date-day">10</span>
+                            <span class="date-month">10月</span>
+                        </div>
                     </div>
                     <div class="blog-content">
                         <h3 class="blog-title">程序员的自我提升之路</h3>
                         <p class="blog-meta">
-                            <i class="far fa-calendar"></i> 2025-10-15
-                            <i class="far fa-clock"></i> 6分钟阅读
+                            <span><i class="far fa-user"></i> 作者</span>
+                            <span><i class="far fa-clock"></i> 6分钟阅读</span>
+                            <span><i class="far fa-comment"></i> 34</span>
                         </p>
-                        <p class="blog-excerpt">分享我作为程序员的成长经历，以及如何持续学习和提升自己...</p>
-                        <a href="#" class="blog-link">阅读更多 <i class="fas fa-arrow-right"></i></a>
+                        <p class="blog-excerpt">分享我作为程序员的成长经历，如何平衡技术学习与生活，持续提升自我价值，建立个人品牌...</p>
+                        <div class="blog-tags">
+                            <span class="mini-tag">职业发展</span>
+                            <span class="mini-tag">学习方法</span>
+                            <span class="mini-tag">成长</span>
+                        </div>
+                        <a href="#" class="blog-link">
+                            阅读全文
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 </article>
+
+                <article class="blog-card" data-category="技术">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1550439062-609e1531270e?w=600&h=400&fit=crop" alt="博客文章图片">
+                        <span class="blog-category">技术</span>
+                        <div class="blog-date">
+                            <span class="date-day">05</span>
+                            <span class="date-month">10月</span>
+                        </div>
+                    </div>
+                    <div class="blog-content">
+                        <h3 class="blog-title">微服务架构设计实践</h3>
+                        <p class="blog-meta">
+                            <span><i class="far fa-user"></i> 作者</span>
+                            <span><i class="far fa-clock"></i> 12分钟阅读</span>
+                            <span><i class="far fa-comment"></i> 52</span>
+                        </p>
+                        <p class="blog-excerpt">从实际项目出发，探讨微服务架构的设计原则、技术选型、服务拆分策略以及常见问题的解决方案...</p>
+                        <div class="blog-tags">
+                            <span class="mini-tag">微服务</span>
+                            <span class="mini-tag">架构</span>
+                            <span class="mini-tag">Docker</span>
+                        </div>
+                        <a href="#" class="blog-link">
+                            阅读全文
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="blog-card" data-category="教程">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=400&fit=crop" alt="博客文章图片">
+                        <span class="blog-category">教程</span>
+                        <div class="blog-date">
+                            <span class="date-day">01</span>
+                            <span class="date-month">10月</span>
+                        </div>
+                    </div>
+                    <div class="blog-content">
+                        <h3 class="blog-title">Git 工作流最佳实践</h3>
+                        <p class="blog-meta">
+                            <span><i class="far fa-user"></i> 作者</span>
+                            <span><i class="far fa-clock"></i> 7分钟阅读</span>
+                            <span><i class="far fa-comment"></i> 28</span>
+                        </p>
+                        <p class="blog-excerpt">介绍团队协作中常用的 Git 工作流，包括分支管理策略、代码审查流程、版本发布规范等实用技巧...</p>
+                        <div class="blog-tags">
+                            <span class="mini-tag">Git</span>
+                            <span class="mini-tag">版本控制</span>
+                            <span class="mini-tag">团队协作</span>
+                        </div>
+                        <a href="#" class="blog-link">
+                            阅读全文
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
+            
+            <div class="text-center" style="margin-top: 3rem;">
+                <a href="#" class="btn btn-secondary">
+                    <i class="fas fa-th-large"></i>
+                    查看所有文章
+                </a>
             </div>
         </div>
     </section>
@@ -136,56 +560,123 @@
     <!-- 联系部分 -->
     <section id="contact" class="contact">
         <div class="container">
-            <h2 class="section-title">联系我</h2>
+            <h2 class="section-title">
+                <span class="title-decorator">联系我</span>
+            </h2>
+            <p class="section-subtitle">期待与你交流技术、探讨合作机会</p>
+            
             <div class="contact-content">
                 <div class="contact-info">
-                    <h3>让我们保持联系</h3>
-                    <p>如果你想与我交流技术、合作项目，或者只是打个招呼，欢迎通过以下方式联系我：</p>
+                    <h3>
+                        <i class="fas fa-comments"></i>
+                        让我们保持联系
+                    </h3>
+                    <p>如果你对我的项目感兴趣，想要技术交流，或者有合作机会，欢迎通过以下方式联系我。我通常会在 24 小时内回复。</p>
                     
                     <div class="contact-methods">
                         <div class="contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <div>
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-details">
                                 <h4>邮箱</h4>
                                 <p>your.email@example.com</p>
+                                <a href="mailto:your.email@example.com">发送邮件</a>
                             </div>
                         </div>
+                        
                         <div class="contact-item">
-                            <i class="fab fa-github"></i>
-                            <div>
+                            <div class="contact-icon">
+                                <i class="fab fa-github"></i>
+                            </div>
+                            <div class="contact-details">
                                 <h4>GitHub</h4>
-                                <p>github.com/yourusername</p>
+                                <p>@kokomi1234</p>
+                                <a href="https://github.com/kokomi1234" target="_blank">访问主页</a>
                             </div>
                         </div>
+                        
                         <div class="contact-item">
-                            <i class="fab fa-twitter"></i>
-                            <div>
-                                <h4>Twitter</h4>
-                                <p>@yourusername</p>
+                            <div class="contact-icon">
+                                <i class="fab fa-linkedin"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>LinkedIn</h4>
+                                <p>专业社交</p>
+                                <a href="#" target="_blank">查看资料</a>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fab fa-weixin"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>微信</h4>
+                                <p>扫码添加好友</p>
+                                <a href="#">显示二维码</a>
                             </div>
                         </div>
                     </div>
 
                     <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-weixin"></i></a>
+                        <a href="https://github.com/kokomi1234" class="social-link" target="_blank" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link" title="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="social-link" title="微信">
+                            <i class="fab fa-weixin"></i>
+                        </a>
+                        <a href="#" class="social-link" title="掘金">
+                            <i class="fas fa-code"></i>
+                        </a>
                     </div>
                 </div>
 
-                <div class="contact-form">
-                    <form id="contactForm">
-                        <div class="form-group">
-                            <input type="text" id="name" name="name" placeholder="你的名字" required>
+                <div class="contact-form-wrapper">
+                    <form id="contactForm" class="contact-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">
+                                    <i class="fas fa-user"></i>
+                                    你的名字
+                                </label>
+                                <input type="text" id="name" name="name" placeholder="请输入你的名字" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">
+                                    <i class="fas fa-envelope"></i>
+                                    你的邮箱
+                                </label>
+                                <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
+                            </div>
                         </div>
+                        
                         <div class="form-group">
-                            <input type="email" id="email" name="email" placeholder="你的邮箱" required>
+                            <label for="subject">
+                                <i class="fas fa-tag"></i>
+                                主题
+                            </label>
+                            <input type="text" id="subject" name="subject" placeholder="邮件主题" required>
                         </div>
+                        
                         <div class="form-group">
-                            <textarea id="message" name="message" rows="5" placeholder="你的消息" required></textarea>
+                            <label for="message">
+                                <i class="fas fa-comment-alt"></i>
+                                消息内容
+                            </label>
+                            <textarea id="message" name="message" rows="6" placeholder="请输入你想说的话..." required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">发送消息</button>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-paper-plane"></i>
+                            发送消息
+                        </button>
                     </form>
                 </div>
             </div>
@@ -195,10 +686,68 @@
     <!-- 页脚 -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 我的博客. 保留所有权利.</p>
-            <p>使用 ❤️ 和 GitHub Pages 构建</p>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>
+                        <i class="fas fa-code"></i>
+                        DevBlog
+                    </h3>
+                    <p>一个专注于分享技术、记录成长的个人博客。用代码改变世界，让技术创造价值。</p>
+                    <div class="footer-social">
+                        <a href="https://github.com/kokomi1234" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>快速链接</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home"><i class="fas fa-angle-right"></i> 首页</a></li>
+                        <li><a href="#about"><i class="fas fa-angle-right"></i> 关于</a></li>
+                        <li><a href="#projects"><i class="fas fa-angle-right"></i> 项目</a></li>
+                        <li><a href="#blog"><i class="fas fa-angle-right"></i> 博客</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>分类</h4>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-angle-right"></i> 技术文章</a></li>
+                        <li><a href="#"><i class="fas fa-angle-right"></i> 编程教程</a></li>
+                        <li><a href="#"><i class="fas fa-angle-right"></i> 项目实战</a></li>
+                        <li><a href="#"><i class="fas fa-angle-right"></i> 生活随笔</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>订阅更新</h4>
+                    <p>订阅我的博客，第一时间获取最新文章推送。</p>
+                    <form class="subscribe-form">
+                        <input type="email" placeholder="输入你的邮箱" required>
+                        <button type="submit">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 DevBlog. 版权所有</p>
+                <p>
+                    使用 <i class="fas fa-heart" style="color: #e74c3c;"></i> 和 
+                    <i class="fas fa-coffee" style="color: #8b5cf6;"></i> 构建 | 
+                    托管于 <i class="fab fa-github"></i> GitHub Pages
+                </p>
+            </div>
         </div>
     </footer>
+    
+    <!-- 返回顶部按钮 -->
+    <button class="back-to-top" id="backToTop" aria-label="返回顶部">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
     <script src="js/script.js"></script>
 </body>
