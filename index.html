@@ -3,752 +3,471 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="我的个人博客 - 分享技术、生活与思考">
-    <title>我的个人博客 | 全栈开发者</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>DevBlog | 极客空间</title>
+    <!-- 依然保留 FontAwesome 图标，这是唯一的外部依赖，通常国内也能访问 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==================== 
+           1. 基础重置 & 变量 
+           ==================== */
+        :root {
+            --bg-color: #0f172a; /* 深蓝黑背景 */
+            --text-color: #e2e8f0;
+            --primary: #3b82f6;  /* 科技蓝 */
+            --secondary: #8b5cf6; /* 紫色 */
+            --accent: #06b6d4;    /* 青色 */
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* 隐藏默认鼠标 */
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif; /* 使用系统字体，最快最稳 */
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        /* ==================== 
+           2. 炫酷背景 Canvas 
+           ==================== */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* 确保在最底层，不挡鼠标点击 */
+            background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%);
+        }
+
+        /* ==================== 
+           3. 自定义鼠标 (JS驱动)
+           ==================== */
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none; /* 关键：让鼠标穿透，不挡点击 */
+        }
+
+        .cursor-dot {
+            width: 8px; height: 8px;
+            background: var(--accent);
+        }
+
+        .cursor-outline {
+            width: 40px; height: 40px;
+            border: 2px solid var(--primary);
+            transition: width 0.2s, height 0.2s, background 0.2s;
+        }
+
+        /* 鼠标悬停态 */
+        body.hover-active .cursor-outline {
+            width: 70px; height: 70px;
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--secondary);
+            backdrop-filter: blur(2px);
+        }
+
+        /* ==================== 
+           4. 布局与组件 
+           ==================== */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 导航栏 */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 1.5rem 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(15, 23, 42, 0.8);
+        }
+        
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--primary); }
+
+        /* Hero 区域 */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.3s;
+            border: none;
+        }
+        
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3); }
+
+        /* 卡片通用样式 (Glassmorphism) */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-color: var(--primary);
+        }
+
+        /* 项目网格 */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 0;
+        }
+
+        /* 替代图片的 CSS 渐变块 */
+        .img-placeholder {
+            width: 100%;
+            height: 180px;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .img-placeholder i { font-size: 3rem; color: rgba(255,255,255,0.5); }
+        
+        /* 第二个项目的占位色 */
+        .card:nth-child(2) .img-placeholder { background: linear-gradient(45deg, #ec4899, #f43f5e); }
+        /* 第三个项目的占位色 */
+        .card:nth-child(3) .img-placeholder { background: linear-gradient(45deg, #10b981, #06b6d4); }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-top: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        /* 技能条 */
+        .skill-item { margin-bottom: 1.5rem; }
+        .skill-info { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+        .progress-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            width: 0;
+            transition: width 1.5s ease;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .cursor-dot, .cursor-outline { display: none; } /* 手机端禁用自定义鼠标 */
+            * { cursor: auto; }
+            .nav-links { display: none; } /* 简化处理：手机端隐藏菜单 */
+        }
+    </style>
 </head>
 <body>
-    <!-- 导航栏 -->
-    <nav class="navbar">
+    <!-- 1. 自定义鼠标 -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- 2. 动态粒子背景 -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- 3. 导航栏 -->
+    <nav>
         <div class="container">
-            <div class="nav-brand">
-                <h1><i class="fas fa-code"></i> DevBlog</h1>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="#home" class="nav-link active">首页</a></li>
-                <li><a href="#about" class="nav-link">关于</a></li>
-                <li><a href="#projects" class="nav-link">项目</a></li>
-                <li><a href="#blog" class="nav-link">博客</a></li>
-                <li><a href="#contact" class="nav-link">联系</a></li>
+            <div class="logo"><i class="fas fa-code"></i> Dev.IO</div>
+            <ul class="nav-links">
+                <li><a href="#home" class="hover-target">首页</a></li>
+                <li><a href="#projects" class="hover-target">项目</a></li>
+                <li><a href="#about" class="hover-target">关于</a></li>
+                <li><a href="#contact" class="hover-target">联系</a></li>
             </ul>
-            <div class="nav-actions">
-                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
         </div>
     </nav>
 
-    <!-- 首页Hero部分 -->
+    <!-- 4. 首页内容 -->
     <section id="home" class="hero">
-        <div class="particles" id="particles"></div>
         <div class="container">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <i class="fas fa-rocket"></i>
-                    <span>欢迎来到我的数字空间</span>
-                </div>
-                <h2 class="hero-title">你好，我是<span class="highlight typing-effect">全栈开发者</span></h2>
-                <p class="hero-subtitle">
-                    <span class="role-text">全栈开发者</span>
-                    <span class="separator">•</span>
-                    <span class="role-text">开源贡献者</span>
-                    <span class="separator">•</span>
-                    <span class="role-text">终身学习者</span>
-                </p>
-                <p class="hero-description">
-                    专注于构建优雅、高效的 Web 应用程序。热衷于探索新技术，分享开发经验，
-                    用代码创造价值，让技术改变生活。
-                </p>
-                <div class="hero-buttons">
-                    <a href="#projects" class="btn btn-primary">
-                        <i class="fas fa-folder-open"></i>
-                        查看项目
-                    </a>
-                    <a href="#contact" class="btn btn-secondary">
-                        <i class="fas fa-paper-plane"></i>
-                        联系我
-                    </a>
-                    <a href="#blog" class="btn btn-outline">
-                        <i class="fas fa-book-open"></i>
-                        阅读博客
-                    </a>
-                </div>
-                
-                <!-- 统计数据 -->
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <div class="stat-number">50+</div>
-                        <div class="stat-label">项目完成</div>
-                    </div>
-                    <div class="stat-divider"></div>
-                    <div class="stat-item">
-                        <div class="stat-number">100+</div>
-                        <div class="stat-label">技术文章</div>
-                    </div>
-                    <div class="stat-divider"></div>
-                    <div class="stat-item">
-                        <div class="stat-number">5k+</div>
-                        <div class="stat-label">代码提交</div>
-                    </div>
-                    <div class="stat-divider"></div>
-                    <div class="stat-item">
-                        <div class="stat-number">3年+</div>
-                        <div class="stat-label">开发经验</div>
-                    </div>
+            <div class="content">
+                <h1 class="reveal-text">
+                    你好，我是 <br>
+                    <span style="color: var(--accent)">全栈开发者</span>
+                </h1>
+                <p class="reveal-text">专注于创造极致的 Web 交互体验。用代码构建数字世界的未来。</p>
+                <div style="display: flex; gap: 1rem;">
+                    <a href="#projects" class="btn hover-target">查看作品</a>
+                    <a href="#contact" class="btn hover-target" style="background: transparent; border: 1px solid var(--primary);">联系我</a>
                 </div>
             </div>
         </div>
-        <div class="scroll-down">
-            <i class="fas fa-chevron-down"></i>
-        </div>
-        <div class="hero-shapes">
-            <div class="shape shape-1"></div>
-            <div class="shape shape-2"></div>
-            <div class="shape shape-3"></div>
+    </section>
+
+    <!-- 5. 项目展示 -->
+    <section id="projects" class="container">
+        <h2 class="section-title">精选项目</h2>
+        <div class="grid-3">
+            <!-- 项目 1 -->
+            <div class="card hover-target">
+                <div class="img-placeholder"><i class="fas fa-chart-line"></i></div>
+                <h3>数据可视化平台</h3>
+                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">基于 WebGL 的大数据展示大屏，支持实时数据流处理。</p>
+                <div style="margin-top:1rem; display:flex; gap:0.5rem;">
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">React</span>
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">D3.js</span>
+                </div>
+            </div>
+            
+            <!-- 项目 2 -->
+            <div class="card hover-target">
+                <div class="img-placeholder"><i class="fas fa-shopping-cart"></i></div>
+                <h3>跨境电商系统</h3>
+                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">高并发微服务架构，包含完整的订单与库存管理系统。</p>
+                <div style="margin-top:1rem; display:flex; gap:0.5rem;">
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Spring Boot</span>
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Vue 3</span>
+                </div>
+            </div>
+
+            <!-- 项目 3 -->
+            <div class="card hover-target">
+                <div class="img-placeholder"><i class="fas fa-robot"></i></div>
+                <h3>AI 智能助手</h3>
+                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">集成 ChatGPT API 的智能问答工具，支持语音输入。</p>
+                <div style="margin-top:1rem; display:flex; gap:0.5rem;">
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Python</span>
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">OpenAI</span>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- 关于部分 -->
-    <section id="about" class="about">
-        <div class="container">
-            <h2 class="section-title">
-                <span class="title-decorator">关于我</span>
-            </h2>
-            <div class="about-content">
-                <div class="about-left">
-                    <div class="about-image">
-                        <div class="image-wrapper">
-                            <img src="https://ui-avatars.com/api/?name=Dev&size=300&background=6366f1&color=fff&bold=true" alt="个人头像">
-                            <div class="image-border"></div>
-                        </div>
-                        <div class="status-badge">
-                            <span class="status-dot"></span>
-                            可合作
-                        </div>
-                    </div>
-                </div>
+    <!-- 6. 技能部分 -->
+    <section id="about" class="container" style="padding-bottom: 100px;">
+        <h2 class="section-title">技术栈</h2>
+        <div class="card" style="max-width: 800px; margin: 0 auto;">
+            <div class="skill-item">
+                <div class="skill-info"><span>JavaScript / TypeScript</span><span>90%</span></div>
+                <div class="progress-bar"><div class="progress" style="width: 0%" data-width="90%"></div></div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-info"><span>React / Next.js</span><span>85%</span></div>
+                <div class="progress-bar"><div class="progress" style="width: 0%" data-width="85%"></div></div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-info"><span>Node.js / Database</span><span>80%</span></div>
+                <div class="progress-bar"><div class="progress" style="width: 0%" data-width="80%"></div></div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        /* ==================== 
+           JS 逻辑中心 
+           ==================== */
+
+        // 1. 鼠标跟随逻辑
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        
+        // 检查是否为移动设备
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+        if (!isMobile) {
+            window.addEventListener('mousemove', (e) => {
+                const posX = e.clientX;
+                const posY = e.clientY;
+
+                // 点点瞬间移动
+                cursorDot.style.left = `${posX}px`;
+                cursorDot.style.top = `${posY}px`;
+
+                // 圆圈缓慢动画
+                cursorOutline.animate({
+                    left: `${posX}px`,
+                    top: `${posY}px`
+                }, { duration: 500, fill: "forwards" });
+            });
+
+            // 鼠标交互放大效果
+            document.querySelectorAll('.hover-target, a, button').forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
+            });
+        }
+
+        // 2. Canvas 粒子星空背景
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let particles = [];
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.color = `rgba(59, 130, 246, ${Math.random() * 0.5 + 0.2})`; // 蓝色带透明
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const particleCount = Math.min(window.innerWidth * window.innerHeight / 10000, 100);
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach((p, index) => {
+                p.update();
+                p.draw();
                 
-                <div class="about-right">
-                    <div class="about-text">
-                        <h3>
-                            <i class="fas fa-user-tie"></i>
-                            个人简介
-                        </h3>
-                        <p>我是一名充满热情的<strong>全栈开发者</strong>，拥有多年的 Web 开发经验。我专注于构建现代化、可扩展的应用程序，热衷于学习和应用最新的技术栈。</p>
-                        <p>我相信<em>优秀的代码不仅要功能完善，更要优雅、可维护</em>。在这个博客中，我会分享我的技术见解、项目经验以及对技术趋势的思考。</p>
-                        
-                        <div class="about-highlights">
-                            <div class="highlight-item">
-                                <i class="fas fa-check-circle"></i>
-                                <span>3+ 年全栈开发经验</span>
-                            </div>
-                            <div class="highlight-item">
-                                <i class="fas fa-check-circle"></i>
-                                <span>50+ 成功项目交付</span>
-                            </div>
-                            <div class="highlight-item">
-                                <i class="fas fa-check-circle"></i>
-                                <span>开源贡献者</span>
-                            </div>
-                            <div class="highlight-item">
-                                <i class="fas fa-check-circle"></i>
-                                <span>技术博主</span>
-                            </div>
-                        </div>
-                    </div>
+                // 连线效果
+                for (let j = index; j < particles.length; j++) {
+                    const dx = p.x - particles[j].x;
+                    const dy = p.y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
                     
-                    <div class="skills">
-                        <h4>
-                            <i class="fas fa-code"></i>
-                            技能专长
-                        </h4>
-                        <div class="skills-grid">
-                            <div class="skill-item">
-                                <div class="skill-header">
-                                    <span class="skill-name">JavaScript / TypeScript</span>
-                                    <span class="skill-percentage">90%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 90%"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="skill-item">
-                                <div class="skill-header">
-                                    <span class="skill-name">React / Next.js</span>
-                                    <span class="skill-percentage">85%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 85%"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="skill-item">
-                                <div class="skill-header">
-                                    <span class="skill-name">Node.js / Express</span>
-                                    <span class="skill-percentage">80%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 80%"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="skill-item">
-                                <div class="skill-header">
-                                    <span class="skill-name">Python / Django</span>
-                                    <span class="skill-percentage">75%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 75%"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="skill-item">
-                                <div class="skill-header">
-                                    <span class="skill-name">数据库 (SQL/NoSQL)</span>
-                                    <span class="skill-percentage">80%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 80%"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="skill-item">
-                                <div class="skill-header">
-                                    <span class="skill-name">DevOps / CI/CD</span>
-                                    <span class="skill-percentage">70%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 70%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="tech-stack">
-                            <span class="tech-tag"><i class="fab fa-html5"></i> HTML5</span>
-                            <span class="tech-tag"><i class="fab fa-css3-alt"></i> CSS3</span>
-                            <span class="tech-tag"><i class="fab fa-js"></i> JavaScript</span>
-                            <span class="tech-tag"><i class="fab fa-react"></i> React</span>
-                            <span class="tech-tag"><i class="fab fa-node-js"></i> Node.js</span>
-                            <span class="tech-tag"><i class="fab fa-python"></i> Python</span>
-                            <span class="tech-tag"><i class="fab fa-git-alt"></i> Git</span>
-                            <span class="tech-tag"><i class="fab fa-docker"></i> Docker</span>
-                            <span class="tech-tag"><i class="fas fa-database"></i> MongoDB</span>
-                            <span class="tech-tag"><i class="fas fa-database"></i> PostgreSQL</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- 项目展示部分 -->
-    <section id="projects" class="projects">
-        <div class="container">
-            <h2 class="section-title">
-                <span class="title-decorator">精选项目</span>
-            </h2>
-            <p class="section-subtitle">以下是我最近完成的一些项目，展示了我的技术能力和创造力</p>
-            
-            <div class="projects-grid">
-                <div class="project-card featured">
-                    <div class="project-image">
-                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop" alt="项目1">
-                        <div class="project-overlay">
-                            <a href="#" class="project-link" title="查看详情">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="#" class="project-link" title="查看代码">
-                                <i class="fab fa-github"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-badge">精选</div>
-                        <h3>智能数据分析平台</h3>
-                        <p>一个功能强大的数据可视化和分析平台，支持实时数据处理和多维度报表生成。</p>
-                        <div class="project-tags">
-                            <span class="project-tag">React</span>
-                            <span class="project-tag">Node.js</span>
-                            <span class="project-tag">MongoDB</span>
-                            <span class="project-tag">D3.js</span>
-                        </div>
-                        <div class="project-meta">
-                            <span><i class="fas fa-star"></i> 234</span>
-                            <span><i class="fas fa-code-branch"></i> 45</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600&h=400&fit=crop" alt="项目2">
-                        <div class="project-overlay">
-                            <a href="#" class="project-link" title="查看详情">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="#" class="project-link" title="查看代码">
-                                <i class="fab fa-github"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3>电商管理系统</h3>
-                        <p>完整的电商后台管理系统，包含订单管理、库存管理、数据统计等功能。</p>
-                        <div class="project-tags">
-                            <span class="project-tag">Vue.js</span>
-                            <span class="project-tag">Express</span>
-                            <span class="project-tag">MySQL</span>
-                        </div>
-                        <div class="project-meta">
-                            <span><i class="fas fa-star"></i> 156</span>
-                            <span><i class="fas fa-code-branch"></i> 32</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=400&fit=crop" alt="项目3">
-                        <div class="project-overlay">
-                            <a href="#" class="project-link" title="查看详情">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="#" class="project-link" title="查看代码">
-                                <i class="fab fa-github"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3>实时聊天应用</h3>
-                        <p>基于 WebSocket 的实时通讯应用，支持群聊、私聊、文件传输等功能。</p>
-                        <div class="project-tags">
-                            <span class="project-tag">React</span>
-                            <span class="project-tag">Socket.io</span>
-                            <span class="project-tag">Redis</span>
-                        </div>
-                        <div class="project-meta">
-                            <span><i class="fas fa-star"></i> 189</span>
-                            <span><i class="fas fa-code-branch"></i> 28</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="text-center" style="margin-top: 3rem;">
-                <a href="https://github.com/kokomi1234" class="btn btn-primary" target="_blank">
-                    <i class="fab fa-github"></i>
-                    查看更多项目
-                </a>
-            </div>
-        </div>
-    </section>
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(139, 92, 246, ${1 - distance/100})`; // 紫色连线
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animate);
+        }
 
-    <!-- 博客部分 -->
-    <section id="blog" class="blog">
-        <div class="container">
-            <h2 class="section-title">
-                <span class="title-decorator">最新文章</span>
-            </h2>
-            <p class="section-subtitle">分享我的技术见解、开发经验和学习心得</p>
-            
-            <!-- 博客分类过滤 -->
-            <div class="blog-filters">
-                <button class="filter-btn active" data-filter="all">
-                    <i class="fas fa-th"></i> 全部
-                </button>
-                <button class="filter-btn" data-filter="技术">
-                    <i class="fas fa-laptop-code"></i> 技术
-                </button>
-                <button class="filter-btn" data-filter="编程">
-                    <i class="fas fa-code"></i> 编程
-                </button>
-                <button class="filter-btn" data-filter="生活">
-                    <i class="fas fa-heart"></i> 生活
-                </button>
-                <button class="filter-btn" data-filter="教程">
-                    <i class="fas fa-book"></i> 教程
-                </button>
-            </div>
-            
-            <div class="blog-grid" id="blogGrid">
-                <!-- 博客文章卡片 -->
-                <article class="blog-card" data-category="技术">
-                    <div class="blog-image">
-                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop" alt="博客文章图片">
-                        <span class="blog-category">技术</span>
-                        <div class="blog-date">
-                            <span class="date-day">27</span>
-                            <span class="date-month">10月</span>
-                        </div>
-                    </div>
-                    <div class="blog-content">
-                        <h3 class="blog-title">如何搭建现代化的个人博客</h3>
-                        <p class="blog-meta">
-                            <span><i class="far fa-user"></i> 作者</span>
-                            <span><i class="far fa-clock"></i> 5分钟阅读</span>
-                            <span><i class="far fa-comment"></i> 23</span>
-                        </p>
-                        <p class="blog-excerpt">详细介绍如何使用现代前端技术栈搭建一个功能完善、设计精美的个人博客网站，从技术选型到部署上线的完整流程...</p>
-                        <div class="blog-tags">
-                            <span class="mini-tag">GitHub Pages</span>
-                            <span class="mini-tag">HTML/CSS</span>
-                            <span class="mini-tag">JavaScript</span>
-                        </div>
-                        <a href="#" class="blog-link">
-                            阅读全文
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </article>
+        initParticles();
+        animate();
 
-                <article class="blog-card" data-category="编程">
-                    <div class="blog-image">
-                        <img src="https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=600&h=400&fit=crop" alt="博客文章图片">
-                        <span class="blog-category">编程</span>
-                        <div class="blog-date">
-                            <span class="date-day">20</span>
-                            <span class="date-month">10月</span>
-                        </div>
-                    </div>
-                    <div class="blog-content">
-                        <h3 class="blog-title">JavaScript 异步编程完全指南</h3>
-                        <p class="blog-meta">
-                            <span><i class="far fa-user"></i> 作者</span>
-                            <span><i class="far fa-clock"></i> 8分钟阅读</span>
-                            <span><i class="far fa-comment"></i> 45</span>
-                        </p>
-                        <p class="blog-excerpt">深入探讨 JavaScript 异步编程的核心概念，包括 Promise、async/await、事件循环等，帮助你彻底理解异步编程...</p>
-                        <div class="blog-tags">
-                            <span class="mini-tag">JavaScript</span>
-                            <span class="mini-tag">Promise</span>
-                            <span class="mini-tag">Async</span>
-                        </div>
-                        <a href="#" class="blog-link">
-                            阅读全文
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </article>
+        // 3. 简单的滚动动画 (IntersectionObserver)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // 如果是进度条
+                    if (entry.target.classList.contains('progress')) {
+                        entry.target.style.width = entry.target.getAttribute('data-width');
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
 
-                <article class="blog-card" data-category="教程">
-                    <div class="blog-image">
-                        <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=600&h=400&fit=crop" alt="博客文章图片">
-                        <span class="blog-category">教程</span>
-                        <div class="blog-date">
-                            <span class="date-day">15</span>
-                            <span class="date-month">10月</span>
-                        </div>
-                    </div>
-                    <div class="blog-content">
-                        <h3 class="blog-title">React Hooks 实战技巧</h3>
-                        <p class="blog-meta">
-                            <span><i class="far fa-user"></i> 作者</span>
-                            <span><i class="far fa-clock"></i> 10分钟阅读</span>
-                            <span><i class="far fa-comment"></i> 67</span>
-                        </p>
-                        <p class="blog-excerpt">通过实际项目案例，学习如何正确使用 React Hooks，避免常见陷阱，提升应用性能和代码质量...</p>
-                        <div class="blog-tags">
-                            <span class="mini-tag">React</span>
-                            <span class="mini-tag">Hooks</span>
-                            <span class="mini-tag">前端</span>
-                        </div>
-                        <a href="#" class="blog-link">
-                            阅读全文
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </article>
-
-                <article class="blog-card" data-category="生活">
-                    <div class="blog-image">
-                        <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=600&h=400&fit=crop" alt="博客文章图片">
-                        <span class="blog-category">生活</span>
-                        <div class="blog-date">
-                            <span class="date-day">10</span>
-                            <span class="date-month">10月</span>
-                        </div>
-                    </div>
-                    <div class="blog-content">
-                        <h3 class="blog-title">程序员的自我提升之路</h3>
-                        <p class="blog-meta">
-                            <span><i class="far fa-user"></i> 作者</span>
-                            <span><i class="far fa-clock"></i> 6分钟阅读</span>
-                            <span><i class="far fa-comment"></i> 34</span>
-                        </p>
-                        <p class="blog-excerpt">分享我作为程序员的成长经历，如何平衡技术学习与生活，持续提升自我价值，建立个人品牌...</p>
-                        <div class="blog-tags">
-                            <span class="mini-tag">职业发展</span>
-                            <span class="mini-tag">学习方法</span>
-                            <span class="mini-tag">成长</span>
-                        </div>
-                        <a href="#" class="blog-link">
-                            阅读全文
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </article>
-
-                <article class="blog-card" data-category="技术">
-                    <div class="blog-image">
-                        <img src="https://images.unsplash.com/photo-1550439062-609e1531270e?w=600&h=400&fit=crop" alt="博客文章图片">
-                        <span class="blog-category">技术</span>
-                        <div class="blog-date">
-                            <span class="date-day">05</span>
-                            <span class="date-month">10月</span>
-                        </div>
-                    </div>
-                    <div class="blog-content">
-                        <h3 class="blog-title">微服务架构设计实践</h3>
-                        <p class="blog-meta">
-                            <span><i class="far fa-user"></i> 作者</span>
-                            <span><i class="far fa-clock"></i> 12分钟阅读</span>
-                            <span><i class="far fa-comment"></i> 52</span>
-                        </p>
-                        <p class="blog-excerpt">从实际项目出发，探讨微服务架构的设计原则、技术选型、服务拆分策略以及常见问题的解决方案...</p>
-                        <div class="blog-tags">
-                            <span class="mini-tag">微服务</span>
-                            <span class="mini-tag">架构</span>
-                            <span class="mini-tag">Docker</span>
-                        </div>
-                        <a href="#" class="blog-link">
-                            阅读全文
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </article>
-
-                <article class="blog-card" data-category="教程">
-                    <div class="blog-image">
-                        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=400&fit=crop" alt="博客文章图片">
-                        <span class="blog-category">教程</span>
-                        <div class="blog-date">
-                            <span class="date-day">01</span>
-                            <span class="date-month">10月</span>
-                        </div>
-                    </div>
-                    <div class="blog-content">
-                        <h3 class="blog-title">Git 工作流最佳实践</h3>
-                        <p class="blog-meta">
-                            <span><i class="far fa-user"></i> 作者</span>
-                            <span><i class="far fa-clock"></i> 7分钟阅读</span>
-                            <span><i class="far fa-comment"></i> 28</span>
-                        </p>
-                        <p class="blog-excerpt">介绍团队协作中常用的 Git 工作流，包括分支管理策略、代码审查流程、版本发布规范等实用技巧...</p>
-                        <div class="blog-tags">
-                            <span class="mini-tag">Git</span>
-                            <span class="mini-tag">版本控制</span>
-                            <span class="mini-tag">团队协作</span>
-                        </div>
-                        <a href="#" class="blog-link">
-                            阅读全文
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </article>
-            </div>
-            
-            <div class="text-center" style="margin-top: 3rem;">
-                <a href="#" class="btn btn-secondary">
-                    <i class="fas fa-th-large"></i>
-                    查看所有文章
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- 联系部分 -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2 class="section-title">
-                <span class="title-decorator">联系我</span>
-            </h2>
-            <p class="section-subtitle">期待与你交流技术、探讨合作机会</p>
-            
-            <div class="contact-content">
-                <div class="contact-info">
-                    <h3>
-                        <i class="fas fa-comments"></i>
-                        让我们保持联系
-                    </h3>
-                    <p>如果你对我的项目感兴趣，想要技术交流，或者有合作机会，欢迎通过以下方式联系我。我通常会在 24 小时内回复。</p>
-                    
-                    <div class="contact-methods">
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h4>邮箱</h4>
-                                <p>your.email@example.com</p>
-                                <a href="mailto:your.email@example.com">发送邮件</a>
-                            </div>
-                        </div>
-                        
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fab fa-github"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h4>GitHub</h4>
-                                <p>@kokomi1234</p>
-                                <a href="https://github.com/kokomi1234" target="_blank">访问主页</a>
-                            </div>
-                        </div>
-                        
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fab fa-linkedin"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h4>LinkedIn</h4>
-                                <p>专业社交</p>
-                                <a href="#" target="_blank">查看资料</a>
-                            </div>
-                        </div>
-                        
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fab fa-weixin"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h4>微信</h4>
-                                <p>扫码添加好友</p>
-                                <a href="#">显示二维码</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="social-links">
-                        <a href="https://github.com/kokomi1234" class="social-link" target="_blank" title="GitHub">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="#" class="social-link" title="Twitter">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="social-link" title="LinkedIn">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                        <a href="#" class="social-link" title="微信">
-                            <i class="fab fa-weixin"></i>
-                        </a>
-                        <a href="#" class="social-link" title="掘金">
-                            <i class="fas fa-code"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="contact-form-wrapper">
-                    <form id="contactForm" class="contact-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="name">
-                                    <i class="fas fa-user"></i>
-                                    你的名字
-                                </label>
-                                <input type="text" id="name" name="name" placeholder="请输入你的名字" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">
-                                    <i class="fas fa-envelope"></i>
-                                    你的邮箱
-                                </label>
-                                <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="subject">
-                                <i class="fas fa-tag"></i>
-                                主题
-                            </label>
-                            <input type="text" id="subject" name="subject" placeholder="邮件主题" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="message">
-                                <i class="fas fa-comment-alt"></i>
-                                消息内容
-                            </label>
-                            <textarea id="message" name="message" rows="6" placeholder="请输入你想说的话..." required></textarea>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary btn-block">
-                            <i class="fas fa-paper-plane"></i>
-                            发送消息
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 页脚 -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>
-                        <i class="fas fa-code"></i>
-                        DevBlog
-                    </h3>
-                    <p>一个专注于分享技术、记录成长的个人博客。用代码改变世界，让技术创造价值。</p>
-                    <div class="footer-social">
-                        <a href="https://github.com/kokomi1234" target="_blank"><i class="fab fa-github"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-weixin"></i></a>
-                    </div>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>快速链接</h4>
-                    <ul class="footer-links">
-                        <li><a href="#home"><i class="fas fa-angle-right"></i> 首页</a></li>
-                        <li><a href="#about"><i class="fas fa-angle-right"></i> 关于</a></li>
-                        <li><a href="#projects"><i class="fas fa-angle-right"></i> 项目</a></li>
-                        <li><a href="#blog"><i class="fas fa-angle-right"></i> 博客</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>分类</h4>
-                    <ul class="footer-links">
-                        <li><a href="#"><i class="fas fa-angle-right"></i> 技术文章</a></li>
-                        <li><a href="#"><i class="fas fa-angle-right"></i> 编程教程</a></li>
-                        <li><a href="#"><i class="fas fa-angle-right"></i> 项目实战</a></li>
-                        <li><a href="#"><i class="fas fa-angle-right"></i> 生活随笔</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>订阅更新</h4>
-                    <p>订阅我的博客，第一时间获取最新文章推送。</p>
-                    <form class="subscribe-form">
-                        <input type="email" placeholder="输入你的邮箱" required>
-                        <button type="submit">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2025 DevBlog. 版权所有</p>
-                <p>
-                    使用 <i class="fas fa-heart" style="color: #e74c3c;"></i> 和 
-                    <i class="fas fa-coffee" style="color: #8b5cf6;"></i> 构建 | 
-                    托管于 <i class="fab fa-github"></i> GitHub Pages
-                </p>
-            </div>
-        </div>
-    </footer>
-    
-    <!-- 返回顶部按钮 -->
-    <button class="back-to-top" id="backToTop" aria-label="返回顶部">
-        <i class="fas fa-arrow-up"></i>
-    </button>
-
-    <script src="js/script.js"></script>
+        document.querySelectorAll('.progress').forEach(el => observer.observe(el));
+    </script>
 </body>
 </html>
