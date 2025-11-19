@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实时聊天应用 | DevBlog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #e2e8f0;
+            --primary: #3b82f6;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%);
+        }
+
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .cursor-dot {
+            width: 8px; height: 8px;
+            background: var(--accent);
+        }
+
+        .cursor-outline {
+            width: 40px; height: 40px;
+            border: 2px solid var(--primary);
+            transition: width 0.2s, height 0.2s, background 0.2s;
+        }
+
+        body.hover-active .cursor-outline {
+            width: 70px; height: 70px;
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--secondary);
+            backdrop-filter: blur(2px);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 1.5rem 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(15, 23, 42, 0.8);
+        }
+        
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--primary); }
+
+        .breadcrumb {
+            margin-top: 100px;
+            padding: 1rem 0;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary);
+        }
+
+        .project-header {
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .project-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #10b981, #06b6d4);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .tags {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-color: var(--primary);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin: 3rem 0 1.5rem;
+            color: #10b981;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            border-color: #10b981;
+        }
+
+        .feature-item i {
+            font-size: 2.5rem;
+            color: #10b981;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-item p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+
+        .tech-item {
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            border-radius: 25px;
+            font-weight: 500;
+            transition: transform 0.3s;
+        }
+
+        .tech-item:hover {
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #10b981;
+        }
+
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(90deg, #10b981, #06b6d4);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.3s;
+            margin: 0.5rem;
+        }
+        
+        .btn:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3); 
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #10b981;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            color: #10b981;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .cursor-dot, .cursor-outline { display: none; }
+            * { cursor: auto; }
+            .nav-links { display: none; }
+            .stats { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+    <canvas id="particles-canvas"></canvas>
+
+    <nav>
+        <div class="container">
+            <div class="logo"><i class="fas fa-code"></i> Dev.IO</div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="hover-target">首页</a></li>
+                <li><a href="index.html#projects" class="hover-target">项目</a></li>
+                <li><a href="index.html#blog" class="hover-target">博客</a></li>
+                <li><a href="index.html#about" class="hover-target">关于</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html" class="hover-target"><i class="fas fa-home"></i> 首页</a> / 
+            <a href="index.html#projects" class="hover-target">项目</a> / 
+            <span>实时聊天应用</span>
+        </div>
+
+        <div class="project-header">
+            <h1>实时聊天应用</h1>
+            <p>基于WebSocket的现代化实时通讯应用，支持私聊、群聊、文件传输、消息撤回等功能，为用户提供流畅的即时通讯体验。</p>
+            <div class="tags">
+                <span class="tag"><i class="fab fa-react"></i> React</span>
+                <span class="tag"><i class="fas fa-plug"></i> Socket.io</span>
+                <span class="tag"><i class="fab fa-node-js"></i> Node.js</span>
+                <span class="tag"><i class="fas fa-database"></i> Redis</span>
+                <span class="tag"><i class="fas fa-lock"></i> JWT</span>
+            </div>
+            <div style="margin-top: 2rem;">
+                <a href="https://github.com/kokomi1234" class="btn hover-target" target="_blank">
+                    <i class="fab fa-github"></i> 查看源码
+                </a>
+                <a href="#" class="btn btn-outline hover-target">
+                    <i class="fas fa-external-link-alt"></i> 在线演示
+                </a>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">2K+</div>
+                <div class="stat-label">在线用户</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">50ms</div>
+                <div class="stat-label">消息延迟</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">99%</div>
+                <div class="stat-label">消息送达率</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">服务可用</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> 项目简介</h2>
+            <p style="font-size: 1.1rem; line-height: 1.8; color: #94a3b8;">
+                在移动互联网时代，即时通讯已经成为人们日常沟通的重要方式。本项目采用WebSocket技术实现全双工通信，确保消息的实时性和可靠性。
+            </p>
+            <p style="font-size: 1.1rem; line-height: 1.8; color: #94a3b8; margin-top: 1rem;">
+                系统前端使用React构建现代化界面，后端采用Node.js + Socket.io实现WebSocket服务，配合Redis进行消息队列和会话管理，保证高并发场景下的系统稳定性。
+            </p>
+        </div>
+
+        <h2 class="section-title"><i class="fas fa-star"></i> 核心功能</h2>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <i class="fas fa-comments"></i>
+                <h3>私聊 & 群聊</h3>
+                <p>支持一对一私聊和多人群聊，消息实时同步到所有在线设备</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-file-upload"></i>
+                <h3>文件传输</h3>
+                <p>支持图片、文档、视频等多种文件类型的发送和接收</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-history"></i>
+                <h3>消息历史</h3>
+                <p>完整的消息记录，支持搜索和导出，云端永久保存</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-undo"></i>
+                <h3>消息撤回</h3>
+                <p>2分钟内可撤回已发送消息，支持删除和编辑</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-video"></i>
+                <h3>音视频通话</h3>
+                <p>基于WebRTC的高清音视频通话功能</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-smile"></i>
+                <h3>表情 & 贴纸</h3>
+                <p>丰富的表情包和动态贴纸，让聊天更有趣</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title"><i class="fas fa-cogs"></i> 技术架构</h2>
+            <h3 style="color: #10b981; margin: 1.5rem 0 1rem;">前端技术</h3>
+            <div class="tech-stack">
+                <span class="tech-item"><i class="fab fa-react"></i> React</span>
+                <span class="tech-item"><i class="fas fa-code"></i> TypeScript</span>
+                <span class="tech-item"><i class="fas fa-plug"></i> Socket.io Client</span>
+                <span class="tech-item"><i class="fas fa-palette"></i> Ant Design</span>
+                <span class="tech-item"><i class="fas fa-layer-group"></i> Redux</span>
+            </div>
+            
+            <h3 style="color: #10b981; margin: 1.5rem 0 1rem;">后端技术</h3>
+            <div class="tech-stack">
+                <span class="tech-item"><i class="fab fa-node-js"></i> Node.js</span>
+                <span class="tech-item"><i class="fas fa-plug"></i> Socket.io</span>
+                <span class="tech-item"><i class="fas fa-database"></i> MongoDB</span>
+                <span class="tech-item"><i class="fas fa-memory"></i> Redis</span>
+                <span class="tech-item"><i class="fas fa-server"></i> Express</span>
+            </div>
+            
+            <h3 style="color: #10b981; margin: 1.5rem 0 1rem;">其他技术</h3>
+            <div class="tech-stack">
+                <span class="tech-item"><i class="fas fa-video"></i> WebRTC</span>
+                <span class="tech-item"><i class="fas fa-lock"></i> JWT认证</span>
+                <span class="tech-item"><i class="fab fa-docker"></i> Docker</span>
+                <span class="tech-item"><i class="fab fa-aws"></i> AWS S3</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title"><i class="fas fa-code"></i> 技术实现</h2>
+            <h3 style="color: #10b981; margin: 1.5rem 0 1rem;">WebSocket连接</h3>
+            <div class="code-block">
+                <code>
+// Socket.io连接示例<br>
+const socket = io('wss://chat.example.com', {<br>
+&nbsp;&nbsp;auth: { token: userToken },<br>
+&nbsp;&nbsp;transports: ['websocket']<br>
+});<br><br>
+
+socket.on('message', (data) => {<br>
+&nbsp;&nbsp;console.log('收到新消息:', data);<br>
+&nbsp;&nbsp;updateMessageList(data);<br>
+});<br><br>
+
+socket.emit('sendMessage', {<br>
+&nbsp;&nbsp;to: userId,<br>
+&nbsp;&nbsp;content: message,<br>
+&nbsp;&nbsp;type: 'text'<br>
+});
+                </code>
+            </div>
+
+            <h3 style="color: #10b981; margin: 1.5rem 0 1rem;">消息队列处理</h3>
+            <p style="color: #94a3b8; margin: 1rem 0;">
+                使用Redis的Pub/Sub模式实现消息分发，确保多服务器环境下的消息同步。当用户发送消息时，服务器将消息发布到Redis频道，所有订阅该频道的服务器实例都会收到消息并推送给相应的客户端。
+            </p>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title"><i class="fas fa-lightbulb"></i> 项目亮点</h2>
+            <ul style="font-size: 1.1rem; line-height: 2; color: #94a3b8; list-style: none;">
+                <li><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i> 采用Socket.io实现WebSocket通信，自动降级到轮询</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i> 消息队列确保消息不丢失，离线消息自动推送</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i> 实现消息已读/未读状态同步</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i> 支持表情、图片、文件等多种消息类型</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i> WebRTC点对点音视频通话，低延迟高质量</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i> 完善的消息加密机制，保护用户隐私</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title"><i class="fas fa-trophy"></i> 项目成果</h2>
+            <ul style="font-size: 1.1rem; line-height: 2; color: #94a3b8; list-style: none;">
+                <li><i class="fas fa-award" style="color: #f59e0b; margin-right: 0.5rem;"></i> 支持2000+用户同时在线</li>
+                <li><i class="fas fa-star" style="color: #f59e0b; margin-right: 0.5rem;"></i> 消息平均延迟低于50ms</li>
+                <li><i class="fas fa-users" style="color: #f59e0b; margin-right: 0.5rem;"></i> 日均消息量突破10万条</li>
+                <li><i class="fas fa-chart-line" style="color: #f59e0b; margin-right: 0.5rem;"></i> 系统可用性达99%以上</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; padding: 3rem 0;">
+            <a href="index.html#projects" class="btn hover-target">
+                <i class="fas fa-arrow-left"></i> 返回项目列表
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 鼠标跟随逻辑
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+        if (!isMobile) {
+            window.addEventListener('mousemove', (e) => {
+                cursorDot.style.left = `${e.clientX}px`;
+                cursorDot.style.top = `${e.clientY}px`;
+                cursorOutline.animate({
+                    left: `${e.clientX}px`,
+                    top: `${e.clientY}px`
+                }, { duration: 500, fill: "forwards" });
+            });
+
+            document.querySelectorAll('.hover-target, a, button').forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
+            });
+        }
+
+        // Canvas粒子背景
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.color = `rgba(16, 185, 129, ${Math.random() * 0.5 + 0.2})`;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const particleCount = Math.min(window.innerWidth * window.innerHeight / 10000, 100);
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                p.update();
+                p.draw();
+                for (let j = index; j < particles.length; j++) {
+                    const dx = p.x - particles[j].x;
+                    const dy = p.y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(6, 182, 212, ${1 - distance/100})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+
+        initParticles();
+        animate();
+    </script>
+</body>
+</html>

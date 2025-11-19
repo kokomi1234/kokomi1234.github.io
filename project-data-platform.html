@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能数据分析平台 | DevBlog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #e2e8f0;
+            --primary: #3b82f6;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%);
+        }
+
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .cursor-dot {
+            width: 8px; height: 8px;
+            background: var(--accent);
+        }
+
+        .cursor-outline {
+            width: 40px; height: 40px;
+            border: 2px solid var(--primary);
+            transition: width 0.2s, height 0.2s, background 0.2s;
+        }
+
+        body.hover-active .cursor-outline {
+            width: 70px; height: 70px;
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--secondary);
+            backdrop-filter: blur(2px);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 1.5rem 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(15, 23, 42, 0.8);
+        }
+        
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--primary); }
+
+        .breadcrumb {
+            margin-top: 100px;
+            padding: 1rem 0;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary);
+        }
+
+        .project-header {
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .project-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .tags {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-color: var(--primary);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin: 3rem 0 1.5rem;
+            color: var(--primary);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .feature-item i {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .feature-item h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-item p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+
+        .tech-item {
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 25px;
+            font-weight: 500;
+            transition: transform 0.3s;
+        }
+
+        .tech-item:hover {
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .screenshot {
+            width: 100%;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            margin: 2rem 0;
+            transition: transform 0.3s;
+        }
+
+        .screenshot:hover {
+            transform: scale(1.02);
+            border-color: var(--primary);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.3s;
+            margin: 0.5rem;
+        }
+        
+        .btn:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3); 
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .cursor-dot, .cursor-outline { display: none; }
+            * { cursor: auto; }
+            .nav-links { display: none; }
+            .stats { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+    <canvas id="particles-canvas"></canvas>
+
+    <nav>
+        <div class="container">
+            <div class="logo"><i class="fas fa-code"></i> Dev.IO</div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="hover-target">首页</a></li>
+                <li><a href="index.html#projects" class="hover-target">项目</a></li>
+                <li><a href="index.html#blog" class="hover-target">博客</a></li>
+                <li><a href="index.html#about" class="hover-target">关于</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html" class="hover-target"><i class="fas fa-home"></i> 首页</a> / 
+            <a href="index.html#projects" class="hover-target">项目</a> / 
+            <span>智能数据分析平台</span>
+        </div>
+
+        <div class="project-header">
+            <h1>智能数据分析平台</h1>
+            <p>一个功能强大的企业级数据可视化和分析平台，支持实时数据处理、多维度报表生成和智能数据挖掘，帮助企业快速洞察数据价值。</p>
+            <div class="tags">
+                <span class="tag"><i class="fab fa-react"></i> React 18</span>
+                <span class="tag"><i class="fas fa-chart-bar"></i> D3.js</span>
+                <span class="tag"><i class="fab fa-node-js"></i> Node.js</span>
+                <span class="tag"><i class="fas fa-database"></i> MongoDB</span>
+                <span class="tag"><i class="fab fa-docker"></i> Docker</span>
+            </div>
+            <div style="margin-top: 2rem;">
+                <a href="https://github.com/kokomi1234" class="btn hover-target" target="_blank">
+                    <i class="fab fa-github"></i> 查看源码
+                </a>
+                <a href="#" class="btn btn-outline hover-target">
+                    <i class="fas fa-external-link-alt"></i> 在线演示
+                </a>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">500+</div>
+                <div class="stat-label">活跃用户</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">10K+</div>
+                <div class="stat-label">数据报表</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">98%</div>
+                <div class="stat-label">用户满意度</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">50%</div>
+                <div class="stat-label">效率提升</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> 项目简介</h2>
+            <p style="font-size: 1.1rem; line-height: 1.8; color: #94a3b8;">
+                在当今数据驱动的商业环境中，企业需要快速、准确地分析海量数据以获取商业洞察。本项目旨在为企业提供一个简单易用、功能强大的数据分析解决方案，让数据分析变得更加直观和高效。
+            </p>
+            <p style="font-size: 1.1rem; line-height: 1.8; color: #94a3b8; margin-top: 1rem;">
+                平台采用现代化的技术栈，结合React的组件化开发、D3.js的强大可视化能力和Node.js的高性能后端处理，为用户提供流畅的使用体验。
+            </p>
+        </div>
+
+        <h2 class="section-title"><i class="fas fa-star"></i> 核心功能</h2>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <i class="fas fa-chart-line"></i>
+                <h3>实时数据可视化</h3>
+                <p>支持20+种图表类型，实时展示数据变化，让数据洞察一目了然</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-brain"></i>
+                <h3>智能数据分析</h3>
+                <p>基于机器学习算法，自动识别数据模式和趋势，提供智能化建议</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-file-alt"></i>
+                <h3>多维度报表</h3>
+                <p>灵活的报表生成系统，支持自定义维度和指标，一键导出多种格式</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-database"></i>
+                <h3>多数据源接入</h3>
+                <p>支持MySQL、PostgreSQL、MongoDB等主流数据库及API接口</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-users"></i>
+                <h3>团队协作</h3>
+                <p>支持团队协作、权限管理、报表分享和订阅功能</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>响应式设计</h3>
+                <p>完美适配各种设备，提供一致的使用体验</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title"><i class="fas fa-cogs"></i> 技术架构</h2>
+            <h3 style="color: var(--accent); margin: 1.5rem 0 1rem;">前端技术</h3>
+            <div class="tech-stack">
+                <span class="tech-item"><i class="fab fa-react"></i> React 18</span>
+                <span class="tech-item"><i class="fas fa-code"></i> TypeScript</span>
+                <span class="tech-item"><i class="fas fa-chart-bar"></i> D3.js</span>
+                <span class="tech-item"><i class="fas fa-palette"></i> Tailwind CSS</span>
+                <span class="tech-item"><i class="fas fa-bolt"></i> Vite</span>
+            </div>
+            
+            <h3 style="color: var(--accent); margin: 1.5rem 0 1rem;">后端技术</h3>
+            <div class="tech-stack">
+                <span class="tech-item"><i class="fab fa-node-js"></i> Node.js</span>
+                <span class="tech-item"><i class="fas fa-server"></i> Express</span>
+                <span class="tech-item"><i class="fas fa-database"></i> MongoDB</span>
+                <span class="tech-item"><i class="fas fa-memory"></i> Redis</span>
+                <span class="tech-item"><i class="fas fa-plug"></i> Socket.io</span>
+            </div>
+            
+            <h3 style="color: var(--accent); margin: 1.5rem 0 1rem;">开发工具</h3>
+            <div class="tech-stack">
+                <span class="tech-item"><i class="fab fa-git-alt"></i> Git</span>
+                <span class="tech-item"><i class="fab fa-docker"></i> Docker</span>
+                <span class="tech-item"><i class="fas fa-vial"></i> Jest</span>
+                <span class="tech-item"><i class="fas fa-check-double"></i> Cypress</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title"><i class="fas fa-lightbulb"></i> 项目亮点</h2>
+            <ul style="font-size: 1.1rem; line-height: 2; color: #94a3b8; list-style: none;">
+                <li><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i> 采用微前端架构，模块化程度高，易于维护和扩展</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i> 使用WebSocket实现数据实时推送，响应速度快</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i> 完善的权限管理系统，支持细粒度的数据权限控制</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i> 引入虚拟滚动技术，支持大数据量渲染而不卡顿</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i> Docker容器化部署，支持一键部署和自动扩容</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i> 完整的单元测试和E2E测试，代码覆盖率达90%+</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title"><i class="fas fa-trophy"></i> 项目成果</h2>
+            <ul style="font-size: 1.1rem; line-height: 2; color: #94a3b8; list-style: none;">
+                <li><i class="fas fa-award" style="color: #f59e0b; margin-right: 0.5rem;"></i> 获得公司年度最佳创新项目奖</li>
+                <li><i class="fas fa-star" style="color: #f59e0b; margin-right: 0.5rem;"></i> GitHub开源后获得234+ Stars</li>
+                <li><i class="fas fa-users" style="color: #f59e0b; margin-right: 0.5rem;"></i> 已为15+企业提供数据分析服务</li>
+                <li><i class="fas fa-chart-line" style="color: #f59e0b; margin-right: 0.5rem;"></i> 用户数月增长率达30%</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; padding: 3rem 0;">
+            <a href="index.html#projects" class="btn hover-target">
+                <i class="fas fa-arrow-left"></i> 返回项目列表
+            </a>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script>
+        // 鼠标跟随逻辑
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+        if (!isMobile) {
+            window.addEventListener('mousemove', (e) => {
+                cursorDot.style.left = `${e.clientX}px`;
+                cursorDot.style.top = `${e.clientY}px`;
+                cursorOutline.animate({
+                    left: `${e.clientX}px`,
+                    top: `${e.clientY}px`
+                }, { duration: 500, fill: "forwards" });
+            });
+
+            document.querySelectorAll('.hover-target, a, button').forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
+            });
+        }
+
+        // Canvas粒子背景
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.color = `rgba(59, 130, 246, ${Math.random() * 0.5 + 0.2})`;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const particleCount = Math.min(window.innerWidth * window.innerHeight / 10000, 100);
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                p.update();
+                p.draw();
+                for (let j = index; j < particles.length; j++) {
+                    const dx = p.x - particles[j].x;
+                    const dy = p.y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(139, 92, 246, ${1 - distance/100})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+
+        initParticles();
+        animate();
+    </script>
+</body>
+</html>

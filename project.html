@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="智能数据分析平台 - 项目详情">
+    <title>智能数据分析平台 - 项目展示 | DevBlog</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/project.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html">
+                    <h1><i class="fas fa-code"></i> DevBlog</h1>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html#home" class="nav-link">首页</a></li>
+                <li><a href="index.html#about" class="nav-link">关于</a></li>
+                <li><a href="index.html#projects" class="nav-link active">项目</a></li>
+                <li><a href="index.html#blog" class="nav-link">博客</a></li>
+                <li><a href="index.html#contact" class="nav-link">联系</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 项目Hero -->
+    <section class="project-hero">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html"><i class="fas fa-home"></i> 首页</a>
+                <span class="separator">/</span>
+                <a href="index.html#projects">项目</a>
+                <span class="separator">/</span>
+                <span class="current">智能数据分析平台</span>
+            </div>
+            
+            <div class="project-hero-content">
+                <div class="project-badge featured-badge">
+                    <i class="fas fa-star"></i> 精选项目
+                </div>
+                
+                <h1 class="project-hero-title">智能数据分析平台</h1>
+                
+                <p class="project-hero-description">
+                    一个功能强大的数据可视化和分析平台，支持实时数据处理、多维度报表生成、
+                    智能数据挖掘和预测分析。帮助企业快速洞察数据价值，做出更明智的决策。
+                </p>
+                
+                <div class="project-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-calendar"></i>
+                        <span>2024年9月</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-users"></i>
+                        <span>5人团队</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-clock"></i>
+                        <span>3个月</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-star"></i>
+                        <span>234 Stars</span>
+                    </div>
+                </div>
+                
+                <div class="project-actions">
+                    <a href="https://github.com/kokomi1234" class="btn btn-primary" target="_blank">
+                        <i class="fab fa-github"></i>
+                        查看源码
+                    </a>
+                    <a href="#" class="btn btn-secondary">
+                        <i class="fas fa-external-link-alt"></i>
+                        在线演示
+                    </a>
+                    <a href="#" class="btn btn-outline">
+                        <i class="fas fa-download"></i>
+                        下载文档
+                    </a>
+                </div>
+                
+                <div class="project-tags">
+                    <span class="tag">React</span>
+                    <span class="tag">Node.js</span>
+                    <span class="tag">MongoDB</span>
+                    <span class="tag">D3.js</span>
+                    <span class="tag">TypeScript</span>
+                    <span class="tag">Docker</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 项目详情 -->
+    <main class="project-main">
+        <div class="container">
+            <!-- 项目截图 -->
+            <section class="project-gallery">
+                <h2 class="section-title">
+                    <span class="title-decorator">项目展示</span>
+                </h2>
+                
+                <div class="gallery-main">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=600&fit=crop" alt="项目主界面" class="main-screenshot">
+                </div>
+                
+                <div class="gallery-thumbs">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop" alt="数据仪表板" class="thumb">
+                    <img src="https://images.unsplash.com/photo-1543286386-713bdd548da4?w=400&h=300&fit=crop" alt="数据分析视图" class="thumb">
+                    <img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=300&fit=crop" alt="报表生成" class="thumb">
+                    <img src="https://images.unsplash.com/photo-1533750516457-a7f992034fec?w=400&h=300&fit=crop" alt="移动端适配" class="thumb">
+                </div>
+            </section>
+
+            <!-- 项目简介 -->
+            <section class="project-overview">
+                <div class="overview-grid">
+                    <div class="overview-section">
+                        <h2>
+                            <i class="fas fa-lightbulb"></i>
+                            项目背景
+                        </h2>
+                        <p>在当今数据驱动的商业环境中，企业需要快速、准确地分析海量数据以获取商业洞察。传统的数据分析工具往往复杂难用，学习成本高。</p>
+                        <p>因此，我们开发了这个智能数据分析平台，旨在为企业提供一个简单易用、功能强大的数据分析解决方案，让数据分析变得更加直观和高效。</p>
+                    </div>
+                    
+                    <div class="overview-section">
+                        <h2>
+                            <i class="fas fa-bullseye"></i>
+                            项目目标
+                        </h2>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle"></i> 提供直观易用的数据可视化界面</li>
+                            <li><i class="fas fa-check-circle"></i> 支持实时数据处理和分析</li>
+                            <li><i class="fas fa-check-circle"></i> 实现智能数据挖掘和预测</li>
+                            <li><i class="fas fa-check-circle"></i> 降低数据分析的技术门槛</li>
+                            <li><i class="fas fa-check-circle"></i> 提升企业决策效率</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 核心功能 -->
+            <section class="project-features">
+                <h2 class="section-title">
+                    <span class="title-decorator">核心功能</span>
+                </h2>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>实时数据可视化</h3>
+                        <p>支持多种图表类型，实时展示数据变化，让数据洞察一目了然。包括折线图、柱状图、饼图、散点图等20+种图表类型。</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>智能数据分析</h3>
+                        <p>基于机器学习算法，自动识别数据模式和趋势，提供智能化的数据分析建议和预测。</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3>多维度报表</h3>
+                        <p>灵活的报表生成系统，支持自定义维度和指标，一键导出PDF、Excel等多种格式。</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3>多数据源接入</h3>
+                        <p>支持MySQL、PostgreSQL、MongoDB等主流数据库，以及API接口和文件导入。</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>协作与分享</h3>
+                        <p>支持团队协作，权限管理，报表分享和订阅，让数据洞察在团队中快速流转。</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3>响应式设计</h3>
+                        <p>完美适配各种设备，无论是电脑、平板还是手机，都能获得出色的使用体验。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 技术架构 -->
+            <section class="project-tech">
+                <h2 class="section-title">
+                    <span class="title-decorator">技术架构</span>
+                </h2>
+                
+                <div class="tech-stack">
+                    <div class="tech-category">
+                        <h3><i class="fas fa-layer-group"></i> 前端技术</h3>
+                        <div class="tech-items">
+                            <div class="tech-chip">
+                                <i class="fab fa-react"></i>
+                                <span>React 18</span>
+                            </div>
+                            <div class="tech-chip">
+                                <i class="fab fa-js"></i>
+                                <span>TypeScript</span>
+                            </div>
+                            <div class="tech-chip">
+                                <i class="fas fa-palette"></i>
+                                <span>Tailwind CSS</span>
+                            </div>
+                            <div class="tech-chip">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>D3.js</span>
+                            </div>
+                            <div class="tech-chip">
+                                <i class="fas fa-bolt"></i>
+                                <span>Vite</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tech-category">
+                        <h3><i class="fas fa-server"></i> 后端技术</h3>
+                        <div class="tech-items">
+                            <div class="tech-chip">
+                                <i class="fab fa-node-js"></i>
+                                <span>Node.js</span>
+                            </div>
+                            <div class="tech-chip">
+                                <i class="fas fa-code"></i>
+                                <span>Express</span>
+                            </div>
+                            <div class="tech-chip">
+                                <i class="fas fa-database"></i>
+                                <span>MongoDB</span>
+                            </div>
+                            <div class="tech-chip">
+                                <i class="fas fa-memory"></i>
+                                <span>Redis</span>
+                            </div>
+                            <div class="tech-chip">
+                                <i class="fas fa-plug"></i>
+                                <span>Socket.io</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tech-category">
+                        <h3><i class="fas fa-cogs"></i> 开发工具</h3>
+                        <div class="tech-items">
+                            <div class="tech-chip">
+                                <i class="fab fa-git-alt"></i>
+                                <span>Git</span>
+                            </div>
+                            <div class="tech-chip">
+                                <i class="fab fa-docker"></i>
+                                <span>Docker</span>
+                            </div>
+                            <div class="tech-chip">
+                                <i class="fas fa-check-double"></i>
+                                <span>Jest</span>
+                            </div>
+                            <div class="tech-chip">
+                                <i class="fas fa="code-branch"></i>
+                                <span>CI/CD</span>
+                            </div>
+                            <div class="tech-chip">
+                                <i class="fas fa-vial"></i>
+                                <span>Cypress</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="architecture-diagram">
+                    <h3>系统架构图</h3>
+                    <div class="diagram-container">
+                        <div class="diagram-layer">
+                            <div class="layer-title">表现层</div>
+                            <div class="layer-boxes">
+                                <div class="layer-box">React + TypeScript</div>
+                                <div class="layer-box">D3.js 可视化</div>
+                                <div class="layer-box">响应式UI</div>
+                            </div>
+                        </div>
+                        <div class="diagram-arrow">↓</div>
+                        <div class="diagram-layer">
+                            <div class="layer-title">业务层</div>
+                            <div class="layer-boxes">
+                                <div class="layer-box">数据分析引擎</div>
+                                <div class="layer-box">报表生成器</div>
+                                <div class="layer-box">权限管理</div>
+                            </div>
+                        </div>
+                        <div class="diagram-arrow">↓</div>
+                        <div class="diagram-layer">
+                            <div class="layer-title">数据层</div>
+                            <div class="layer-boxes">
+                                <div class="layer-box">MongoDB</div>
+                                <div class="layer-box">Redis 缓存</div>
+                                <div class="layer-box">文件存储</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 开发过程 -->
+            <section class="project-process">
+                <h2 class="section-title">
+                    <span class="title-decorator">开发历程</span>
+                </h2>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker">1</div>
+                        <div class="timeline-content">
+                            <h3>需求分析与设计</h3>
+                            <span class="timeline-date">第1-2周</span>
+                            <p>深入调研用户需求，分析竞品，确定产品功能和技术方案。完成UI/UX设计和数据库设计。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker">2</div>
+                        <div class="timeline-content">
+                            <h3>核心功能开发</h3>
+                            <span class="timeline-date">第3-6周</span>
+                            <p>搭建项目架构，开发数据可视化模块、数据分析引擎和报表生成系统等核心功能。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker">3</div>
+                        <div class="timeline-content">
+                            <h3>功能完善与优化</h3>
+                            <span class="timeline-date">第7-9周</span>
+                            <p>完善用户体验，优化性能，添加更多图表类型和数据源支持。进行单元测试和集成测试。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker">4</div>
+                        <div class="timeline-content">
+                            <h3>测试与部署</h3>
+                            <span class="timeline-date">第10-12周</span>
+                            <p>进行全面测试，修复bug，优化细节。完成文档编写，部署上线，持续收集用户反馈。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 项目成果 -->
+            <section class="project-results">
+                <h2 class="section-title">
+                    <span class="title-decorator">项目成果</span>
+                </h2>
+                
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div class="result-number">500+</div>
+                        <div class="result-label">活跃用户</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-number">10K+</div>
+                        <div class="result-label">数据报表</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-number">98%</div>
+                        <div class="result-label">用户满意度</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-number">50%</div>
+                        <div class="result-label">效率提升</div>
+                    </div>
+                </div>
+                
+                <div class="achievements">
+                    <h3><i class="fas fa-trophy"></i> 项目成就</h3>
+                    <ul class="achievement-list">
+                        <li>
+                            <i class="fas fa-award"></i>
+                            <div>
+                                <strong>最佳创新项目</strong>
+                                <p>获得公司年度最佳创新项目奖</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-star"></i>
+                            <div>
+                                <strong>GitHub 234 Stars</strong>
+                                <p>开源后获得社区广泛关注</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-users"></i>
+                            <div>
+                                <strong>服务多家企业</strong>
+                                <p>已为15+企业提供数据分析服务</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-chart-line"></i>
+                            <div>
+                                <strong>持续增长</strong>
+                                <p>用户数月增长率达30%</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 经验总结 -->
+            <section class="project-learnings">
+                <h2 class="section-title">
+                    <span class="title-decorator">经验总结</span>
+                </h2>
+                
+                <div class="learnings-grid">
+                    <div class="learning-card">
+                        <div class="learning-icon success">
+                            <i class="fas fa-thumbs-up"></i>
+                        </div>
+                        <h3>成功经验</h3>
+                        <ul>
+                            <li>采用模块化设计，提高代码可维护性</li>
+                            <li>重视用户体验，持续优化交互细节</li>
+                            <li>建立完善的测试体系，保证代码质量</li>
+                            <li>使用TypeScript提高代码健壮性</li>
+                            <li>团队高效协作，定期code review</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="learning-card">
+                        <div class="learning-icon challenge">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h3>遇到的挑战</h3>
+                        <ul>
+                            <li>大数据量下的性能优化问题</li>
+                            <li>复杂图表的交互设计难度</li>
+                            <li>多数据源的统一处理方案</li>
+                            <li>实时数据更新的技术实现</li>
+                            <li>浏览器兼容性问题</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="learning-card">
+                        <div class="learning-icon improvement">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3>改进方向</h3>
+                        <ul>
+                            <li>引入AI算法，提供更智能的分析建议</li>
+                            <li>增加更多数据源和图表类型</li>
+                            <li>优化移动端体验</li>
+                            <li>添加数据预警和通知功能</li>
+                            <li>完善API文档和开发者工具</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 相关项目 -->
+            <section class="related-projects">
+                <h2 class="section-title">
+                    <span class="title-decorator">相关项目</span>
+                </h2>
+                
+                <div class="projects-grid">
+                    <a href="project.html" class="project-card-mini">
+                        <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=500&h=300&fit=crop" alt="项目">
+                        <div class="project-card-content">
+                            <h3>电商管理系统</h3>
+                            <p>完整的电商后台管理系统</p>
+                            <div class="project-card-tags">
+                                <span>Vue.js</span>
+                                <span>Express</span>
+                                <span>MySQL</span>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <a href="project.html" class="project-card-mini">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=500&h=300&fit=crop" alt="项目">
+                        <div class="project-card-content">
+                            <h3>实时聊天应用</h3>
+                            <p>基于WebSocket的通讯应用</p>
+                            <div class="project-card-tags">
+                                <span>React</span>
+                                <span>Socket.io</span>
+                                <span>Redis</span>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <a href="project.html" class="project-card-mini">
+                        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&h=300&fit=crop" alt="项目">
+                        <div class="project-card-content">
+                            <h3>任务管理工具</h3>
+                            <p>团队协作项目管理平台</p>
+                            <div class="project-card-tags">
+                                <span>Next.js</span>
+                                <span>PostgreSQL</span>
+                                <span>Docker</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-code"></i> DevBlog</h3>
+                    <p>一个专注于分享技术、记录成长的个人博客。</p>
+                </div>
+                <div class="footer-section">
+                    <h4>快速链接</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html#home"><i class="fas fa-angle-right"></i> 首页</a></li>
+                        <li><a href="index.html#projects"><i class="fas fa-angle-right"></i> 项目</a></li>
+                        <li><a href="index.html#about"><i class="fas fa-angle-right"></i> 关于</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 DevBlog. 版权所有</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部 -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

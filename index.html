@@ -263,6 +263,7 @@
             <ul class="nav-links">
                 <li><a href="#home" class="hover-target">首页</a></li>
                 <li><a href="#projects" class="hover-target">项目</a></li>
+                <li><a href="#blog" class="hover-target">博客</a></li>
                 <li><a href="#about" class="hover-target">关于</a></li>
                 <li><a href="#contact" class="hover-target">联系</a></li>
             </ul>
@@ -291,42 +292,43 @@
         <h2 class="section-title">精选项目</h2>
         <div class="grid-3">
             <!-- 项目 1 -->
-            <div class="card hover-target">
+            <a href="project-data-platform.html" class="card hover-target" style="text-decoration: none; color: inherit; display: block;">
                 <div class="img-placeholder"><i class="fas fa-chart-line"></i></div>
-                <h3>数据可视化平台</h3>
-                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">基于 WebGL 的大数据展示大屏，支持实时数据流处理。</p>
+                <h3>智能数据分析平台</h3>
+                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">功能强大的数据可视化和分析平台，支持实时数据处理和智能分析。</p>
                 <div style="margin-top:1rem; display:flex; gap:0.5rem;">
                     <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">React</span>
                     <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">D3.js</span>
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Node.js</span>
                 </div>
-            </div>
+            </a>
             
             <!-- 项目 2 -->
-            <div class="card hover-target">
+            <a href="project-ecommerce.html" class="card hover-target" style="text-decoration: none; color: inherit; display: block;">
                 <div class="img-placeholder"><i class="fas fa-shopping-cart"></i></div>
-                <h3>跨境电商系统</h3>
-                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">高并发微服务架构，包含完整的订单与库存管理系统。</p>
+                <h3>电商管理系统</h3>
+                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">完整的电商后台管理系统，包含订单、库存、用户管理等功能。</p>
                 <div style="margin-top:1rem; display:flex; gap:0.5rem;">
-                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Spring Boot</span>
-                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Vue 3</span>
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Vue.js</span>
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Express</span>
                 </div>
-            </div>
+            </a>
 
             <!-- 项目 3 -->
-            <div class="card hover-target">
-                <div class="img-placeholder"><i class="fas fa-robot"></i></div>
-                <h3>AI 智能助手</h3>
-                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">集成 ChatGPT API 的智能问答工具，支持语音输入。</p>
+            <a href="project-chat.html" class="card hover-target" style="text-decoration: none; color: inherit; display: block;">
+                <div class="img-placeholder"><i class="fas fa-comments"></i></div>
+                <h3>实时聊天应用</h3>
+                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">基于WebSocket的实时通讯应用，支持群聊和文件传输。</p>
                 <div style="margin-top:1rem; display:flex; gap:0.5rem;">
-                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Python</span>
-                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">OpenAI</span>
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">React</span>
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Socket.io</span>
                 </div>
-            </div>
+            </a>
         </div>
     </section>
 
     <!-- 6. 技能部分 -->
-    <section id="about" class="container" style="padding-bottom: 100px;">
+    <section id="about" class="container">
         <h2 class="section-title">技术栈</h2>
         <div class="card" style="max-width: 800px; margin: 0 auto;">
             <div class="skill-item">
@@ -343,6 +345,100 @@
             </div>
         </div>
     </section>
+
+    <!-- 7. 博客文章 -->
+    <section id="blog" class="container" style="padding-bottom: 100px;">
+        <h2 class="section-title">最新博客</h2>
+        <div class="grid-3">
+            <!-- 文章 1 -->
+            <a href="article.html" class="card hover-target" style="text-decoration: none; color: inherit; display: block;">
+                <div class="img-placeholder" style="background: linear-gradient(45deg, #f59e0b, #ef4444); height: 150px;">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <div style="padding-top: 0.5rem;">
+                    <span style="padding:4px 12px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">前端开发</span>
+                    <h3 style="margin-top: 1rem; margin-bottom: 0.5rem;">深入理解 React 18 新特性</h3>
+                    <p style="color: #94a3b8; font-size: 0.9rem;">探索 React 18 的并发渲染、自动批处理、Suspense 等新特性，以及如何在项目中应用这些特性来提升性能。</p>
+                    <div style="margin-top: 1rem; color: #64748b; font-size: 0.85rem;">
+                        <i class="far fa-calendar"></i> 2024-11-20
+                        <span style="margin-left: 1rem;"><i class="far fa-eye"></i> 1.2k</span>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- 文章 2 -->
+            <a href="article.html" class="card hover-target" style="text-decoration: none; color: inherit; display: block;">
+                <div class="img-placeholder" style="background: linear-gradient(45deg, #06b6d4, #3b82f6); height: 150px;">
+                    <i class="fas fa-database"></i>
+                </div>
+                <div style="padding-top: 0.5rem;">
+                    <span style="padding:4px 12px; background:rgba(139,92,246,0.2); border-radius:4px; font-size:12px; color:var(--secondary)">后端开发</span>
+                    <h3 style="margin-top: 1rem; margin-bottom: 0.5rem;">Node.js 性能优化实战指南</h3>
+                    <p style="color: #94a3b8; font-size: 0.9rem;">从内存管理、异步优化、数据库查询到负载均衡，全面讲解 Node.js 应用的性能优化技巧。</p>
+                    <div style="margin-top: 1rem; color: #64748b; font-size: 0.85rem;">
+                        <i class="far fa-calendar"></i> 2024-11-18
+                        <span style="margin-left: 1rem;"><i class="far fa-eye"></i> 856</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 文章 3 -->
+            <a href="article.html" class="card hover-target" style="text-decoration: none; color: inherit; display: block;">
+                <div class="img-placeholder" style="background: linear-gradient(45deg, #8b5cf6, #ec4899); height: 150px;">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <div style="padding-top: 0.5rem;">
+                    <span style="padding:4px 12px; background:rgba(16,185,129,0.2); border-radius:4px; font-size:12px; color:#10b981">架构设计</span>
+                    <h3 style="margin-top: 1rem; margin-bottom: 0.5rem;">微服务架构设计最佳实践</h3>
+                    <p style="color: #94a3b8; font-size: 0.9rem;">从单体应用到微服务的演进之路，包括服务拆分、通信机制、数据一致性等核心问题的解决方案。</p>
+                    <div style="margin-top: 1rem; color: #64748b; font-size: 0.85rem;">
+                        <i class="far fa-calendar"></i> 2024-11-15
+                        <span style="margin-left: 1rem;"><i class="far fa-eye"></i> 2.1k</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- 8. 联系方式 -->
+    <section id="contact" class="container" style="padding-bottom: 100px;">
+        <h2 class="section-title">联系我</h2>
+        <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
+            <p style="color: #94a3b8; margin-bottom: 2rem; font-size: 1.1rem;">
+                如果你有任何问题或合作意向，欢迎通过以下方式联系我
+            </p>
+            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                <a href="https://github.com/kokomi1234" target="_blank" class="hover-target" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;">
+                    <i class="fab fa-github" style="font-size: 2.5rem; margin-bottom: 0.5rem; display: block;"></i>
+                    <span>GitHub</span>
+                </a>
+                <a href="mailto:your.email@example.com" class="hover-target" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;">
+                    <i class="fas fa-envelope" style="font-size: 2.5rem; margin-bottom: 0.5rem; display: block;"></i>
+                    <span>Email</span>
+                </a>
+                <a href="#" class="hover-target" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;">
+                    <i class="fab fa-twitter" style="font-size: 2.5rem; margin-bottom: 0.5rem; display: block;"></i>
+                    <span>Twitter</span>
+                </a>
+                <a href="#" class="hover-target" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;">
+                    <i class="fab fa-linkedin" style="font-size: 2.5rem; margin-bottom: 0.5rem; display: block;"></i>
+                    <span>LinkedIn</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer style="background: rgba(15, 23, 42, 0.8); padding: 2rem 0; text-align: center; border-top: 1px solid var(--border-color);">
+        <div class="container">
+            <p style="color: #64748b; margin-bottom: 1rem;">
+                <i class="fas fa-code"></i> 用心编码，创造价值
+            </p>
+            <p style="color: #475569; font-size: 0.9rem;">
+                &copy; 2024 DevBlog. All rights reserved.
+            </p>
+        </div>
+    </footer>
 
     <script>
         /* ==================== 
