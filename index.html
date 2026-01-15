@@ -109,24 +109,27 @@
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-size: 1.8rem;
+            font-weight: 800;
             background: linear-gradient(to right, var(--primary), var(--accent));
             -webkit-background-clip: text;
             color: transparent;
+            letter-spacing: 1px;
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 3.5rem;
             list-style: none;
         }
 
         .nav-links a {
             color: var(--text-color);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 1.05rem;
             transition: 0.3s;
+            letter-spacing: 0.5px;
         }
 
         .nav-links a:hover { color: var(--primary); }
@@ -145,6 +148,135 @@
             margin-bottom: 1rem;
         }
 
+        .avatar-wrap {
+            margin: 1.5rem 0 2rem;
+        }
+
+        .avatar-img {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+        }
+
+        .wechat-qr {
+            width: 160px;
+            height: 160px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            object-fit: cover;
+            box-shadow: 0 18px 30px rgba(0,0,0,0.25);
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+
+        .contact-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .contact-link:focus-visible {
+            outline: 2px dashed var(--primary);
+            outline-offset: 6px;
+        }
+
+        .contact-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(59, 130, 246, 0.15);
+            font-size: 1.7rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .contact-link:hover .contact-icon,
+        .contact-link:focus-visible .contact-icon {
+            transform: scale(1.2);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.35);
+        }
+
+        .contact-link span {
+            font-size: 0.95rem;
+            color: #94a3b8;
+            text-align: center;
+        }
+
+        .wechat-link .contact-icon {
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .email-tooltip {
+            position: absolute;
+            bottom: calc(100% + 12px);
+            left: 50%;
+            transform: translate(-50%, 10px);
+            padding: 0.5rem 0.9rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: rgba(15, 23, 42, 0.9);
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            box-shadow: 0 18px 30px rgba(0,0,0,0.45);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            z-index: 2;
+            white-space: nowrap;
+        }
+
+        .email-link:hover .email-tooltip,
+        .email-link:focus-within .email-tooltip {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        .qr-popup {
+            position: absolute;
+            bottom: calc(100% + 12px);
+            left: 50%;
+            transform: translate(-50%, 10px);
+            padding: 0.8rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            background: rgba(15, 23, 42, 0.9);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            z-index: 2;
+        }
+
+        .wechat-link:hover .qr-popup,
+        .wechat-link:focus-within .qr-popup {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        .qr-popup small {
+            display: block;
+            margin-top: 0.4rem;
+            font-size: 0.75rem;
+            color: #cbd5f5;
+        }
         .glitch-text {
             position: relative;
             display: inline-block;
@@ -180,6 +312,10 @@
             transition: transform 0.3s, box-shadow 0.3s;
             position: relative;
             overflow: hidden;
+        }
+
+        .card.contact-card {
+            overflow: visible;
         }
 
         .card:hover {
@@ -259,7 +395,7 @@
     <!-- 3. 导航栏 -->
     <nav>
         <div class="container">
-            <div class="logo"><i class="fas fa-code"></i> Dev.IO</div>
+            <div class="logo"><i class="fas fa-code"></i> blog</div>
             <ul class="nav-links">
                 <li><a href="#home" class="hover-target">首页</a></li>
                 <li><a href="#projects" class="hover-target">项目</a></li>
@@ -273,13 +409,15 @@
     <!-- 4. 首页内容 -->
     <section id="home" class="hero">
         <div class="container">
-            <div class="content">
+            <div class="content" style="text-align: center;">
                 <h1 class="reveal-text">
-                    你好，我是 <br>
-                    <span style="color: var(--accent)">全栈开发者</span>
+                    你好，我是郑梓辉<br>
+                    <span style="color: var(--accent)">Python / AI 工程师</span>
                 </h1>
-                <p class="reveal-text">专注于创造极致的 Web 交互体验。用代码构建数字世界的未来。</p>
-                <div style="display: flex; gap: 1rem;">
+                <div class="avatar-wrap reveal-text">
+                    <img src="images/avatar.jpg" alt="Zheng Zihui" class="avatar-img">
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: center;">
                     <a href="#projects" class="btn hover-target">查看作品</a>
                     <a href="#contact" class="btn hover-target" style="background: transparent; border: 1px solid var(--primary);">联系我</a>
                 </div>
@@ -289,39 +427,42 @@
 
     <!-- 5. 项目展示 -->
     <section id="projects" class="container">
-        <h2 class="section-title">精选项目</h2>
+        <h2 class="section-title">项目</h2>
         <div class="grid-3">
             <!-- 项目 1 -->
-            <a href="project-data-platform.html" class="card hover-target" style="text-decoration: none; color: inherit; display: block;">
-                <div class="img-placeholder"><i class="fas fa-chart-line"></i></div>
-                <h3>智能数据分析平台</h3>
-                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">功能强大的数据可视化和分析平台，支持实时数据处理和智能分析。</p>
-                <div style="margin-top:1rem; display:flex; gap:0.5rem;">
-                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">React</span>
-                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">D3.js</span>
-                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Node.js</span>
+            <a href="https://github.com/kokomi1234/AI-hallucination" class="card hover-target" style="text-decoration: none; color: inherit; display: block;">
+                <div class="img-placeholder"><i class="fas fa-spider"></i></div>
+                <h3>广东高校数据采集与分析</h3>
+                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">覆盖全省高校的教研数据抓取、清洗与特征化，搭建高可靠知识底座，为指标监测与策略洞察提供实时支持。</p>
+                <div style="margin-top:1rem; display:flex; gap:0.5rem; flex-wrap: wrap;">
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Python</span>
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Playwright / Scrapy</span>
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Airflow</span>
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Superset</span>
                 </div>
             </a>
             
             <!-- 项目 2 -->
-            <a href="project-ecommerce.html" class="card hover-target" style="text-decoration: none; color: inherit; display: block;">
-                <div class="img-placeholder"><i class="fas fa-shopping-cart"></i></div>
-                <h3>电商管理系统</h3>
-                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">完整的电商后台管理系统，包含订单、库存、用户管理等功能。</p>
-                <div style="margin-top:1rem; display:flex; gap:0.5rem;">
-                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Vue.js</span>
-                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Express</span>
+            <a href="https://gitee.com/kokomi12/mogan" class="card hover-target" style="text-decoration: none; color: inherit; display: block;">
+                <div class="img-placeholder"><i class="fas fa-calculator"></i></div>
+                <h3>Mogan（数学模式）实习</h3>
+                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">在文档编辑器中完善数学模式核心：TabCycling 流畅切换、插入模式图片插入、Backspace/Delete 处理，提升输入法式体验。</p>
+                <div style="margin-top:1rem; display:flex; gap:0.5rem; flex-wrap: wrap;">
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Scheme</span>
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Qt</span>
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">C++</span>
                 </div>
             </a>
 
             <!-- 项目 3 -->
             <a href="project-chat.html" class="card hover-target" style="text-decoration: none; color: inherit; display: block;">
-                <div class="img-placeholder"><i class="fas fa-comments"></i></div>
-                <h3>实时聊天应用</h3>
-                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">基于WebSocket的实时通讯应用，支持群聊和文件传输。</p>
+                <div class="img-placeholder"><i class="fas fa-bolt"></i></div>
+                <h3>AI 工程工具链</h3>
+                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">搭建 LLM 应用脚手架，涵盖数据飞轮、Agent 工具编排与服务监控，用工程化手段让模型稳定上线。</p>
                 <div style="margin-top:1rem; display:flex; gap:0.5rem;">
-                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">React</span>
-                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Socket.io</span>
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">FastAPI</span>
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">LangChain</span>
+                    <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Observability</span>
                 </div>
             </a>
         </div>
@@ -330,17 +471,17 @@
     <!-- 6. 技能部分 -->
     <section id="about" class="container">
         <h2 class="section-title">技术栈</h2>
-        <div class="card" style="max-width: 800px; margin: 0 auto;">
+        <div class="card" style="max-width: 800px; margin: 0 auto; text-align: center;">
             <div class="skill-item">
-                <div class="skill-info"><span>JavaScript / TypeScript</span><span>90%</span></div>
-                <div class="progress-bar"><div class="progress" style="width: 0%" data-width="90%"></div></div>
+                <div class="skill-info"><span>Python / 爬虫与数据采集</span><span>92%</span></div>
+                <div class="progress-bar"><div class="progress" style="width: 0%" data-width="92%"></div></div>
             </div>
             <div class="skill-item">
-                <div class="skill-info"><span>React / Next.js</span><span>85%</span></div>
-                <div class="progress-bar"><div class="progress" style="width: 0%" data-width="85%"></div></div>
+                <div class="skill-info"><span>AI / LLM 应用工程化</span><span>88%</span></div>
+                <div class="progress-bar"><div class="progress" style="width: 0%" data-width="88%"></div></div>
             </div>
             <div class="skill-item">
-                <div class="skill-info"><span>Node.js / Database</span><span>80%</span></div>
+                <div class="skill-info"><span>算子优化 / CUDA / Triton</span><span>80%</span></div>
                 <div class="progress-bar"><div class="progress" style="width: 0%" data-width="80%"></div></div>
             </div>
         </div>
@@ -356,12 +497,12 @@
                     <i class="fas fa-laptop-code"></i>
                 </div>
                 <div style="padding-top: 0.5rem;">
-                    <span style="padding:4px 12px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">前端开发</span>
-                    <h3 style="margin-top: 1rem; margin-bottom: 0.5rem;">深入理解 React 18 新特性</h3>
-                    <p style="color: #94a3b8; font-size: 0.9rem;">探索 React 18 的并发渲染、自动批处理、Suspense 等新特性，以及如何在项目中应用这些特性来提升性能。</p>
+                    <span style="padding:4px 12px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">数据采集</span>
+                    <h3 style="margin-top: 1rem; margin-bottom: 0.5rem;">广东高校数据采集流水线的踩坑与复盘</h3>
+                    <p style="color: #94a3b8; font-size: 0.9rem;">从 Playwright 反爬到 Airflow 调度的全链路经验，涵盖日志追踪、重试策略与数据质量校验。</p>
                     <div style="margin-top: 1rem; color: #64748b; font-size: 0.85rem;">
-                        <i class="far fa-calendar"></i> 2024-11-20
-                        <span style="margin-left: 1rem;"><i class="far fa-eye"></i> 1.2k</span>
+                        <i class="far fa-calendar"></i> 2025-12-02
+                        <span style="margin-left: 1rem;"><i class="far fa-eye"></i> 1.3k</span>
                     </div>
                 </div>
             </a>
@@ -372,12 +513,12 @@
                     <i class="fas fa-database"></i>
                 </div>
                 <div style="padding-top: 0.5rem;">
-                    <span style="padding:4px 12px; background:rgba(139,92,246,0.2); border-radius:4px; font-size:12px; color:var(--secondary)">后端开发</span>
-                    <h3 style="margin-top: 1rem; margin-bottom: 0.5rem;">Node.js 性能优化实战指南</h3>
-                    <p style="color: #94a3b8; font-size: 0.9rem;">从内存管理、异步优化、数据库查询到负载均衡，全面讲解 Node.js 应用的性能优化技巧。</p>
+                    <span style="padding:4px 12px; background:rgba(139,92,246,0.2); border-radius:4px; font-size:12px; color:var(--secondary)">算子优化</span>
+                    <h3 style="margin-top: 1rem; margin-bottom: 0.5rem;">块稀疏自注意力算子性能小记</h3>
+                    <p style="color: #94a3b8; font-size: 0.9rem;">记录带宽/算力瓶颈的定位过程，梳理 CUDA/Triton 优化的对比与 profiling 策略。</p>
                     <div style="margin-top: 1rem; color: #64748b; font-size: 0.85rem;">
-                        <i class="far fa-calendar"></i> 2024-11-18
-                        <span style="margin-left: 1rem;"><i class="far fa-eye"></i> 856</span>
+                        <i class="far fa-calendar"></i> 2025-11-10
+                        <span style="margin-left: 1rem;"><i class="far fa-eye"></i> 980</span>
                     </div>
                 </div>
             </a>
@@ -388,12 +529,12 @@
                     <i class="fas fa-rocket"></i>
                 </div>
                 <div style="padding-top: 0.5rem;">
-                    <span style="padding:4px 12px; background:rgba(16,185,129,0.2); border-radius:4px; font-size:12px; color:#10b981">架构设计</span>
-                    <h3 style="margin-top: 1rem; margin-bottom: 0.5rem;">微服务架构设计最佳实践</h3>
-                    <p style="color: #94a3b8; font-size: 0.9rem;">从单体应用到微服务的演进之路，包括服务拆分、通信机制、数据一致性等核心问题的解决方案。</p>
+                    <span style="padding:4px 12px; background:rgba(16,185,129,0.2); border-radius:4px; font-size:12px; color:#10b981">实习笔记</span>
+                    <h3 style="margin-top: 1rem; margin-bottom: 0.5rem;">Mogan 数学模式 TabCycling 细节复盘</h3>
+                    <p style="color: #94a3b8; font-size: 0.9rem;">讲清楚 tab 循环、图片插入与删除逻辑的边界处理，以及如何提升编辑体验稳定性。</p>
                     <div style="margin-top: 1rem; color: #64748b; font-size: 0.85rem;">
-                        <i class="far fa-calendar"></i> 2024-11-15
-                        <span style="margin-left: 1rem;"><i class="far fa-eye"></i> 2.1k</span>
+                        <i class="far fa-calendar"></i> 2025-10-01
+                        <span style="margin-left: 1rem;"><i class="far fa-eye"></i> 1.6k</span>
                     </div>
                 </div>
             </a>
@@ -403,27 +544,24 @@
     <!-- 8. 联系方式 -->
     <section id="contact" class="container" style="padding-bottom: 100px;">
         <h2 class="section-title">联系我</h2>
-        <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
+        <div class="card contact-card" style="max-width: 600px; margin: 0 auto; text-align: center;">
             <p style="color: #94a3b8; margin-bottom: 2rem; font-size: 1.1rem;">
-                如果你有任何问题或合作意向，欢迎通过以下方式联系我
+                合作与交流，欢迎邮件或微信联系。
             </p>
-            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
-                <a href="https://github.com/kokomi1234" target="_blank" class="hover-target" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;">
-                    <i class="fab fa-github" style="font-size: 2.5rem; margin-bottom: 0.5rem; display: block;"></i>
-                    <span>GitHub</span>
+            <div class="contact-links">
+                <a href="mailto:zhengzh86@mail2.sysu.edu.cn" class="contact-link email-link hover-target">
+                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                    <span>邮箱联系</span>
+                    <div class="email-tooltip">zhengzh86@mail2.sysu.edu.cn</div>
                 </a>
-                <a href="mailto:your.email@example.com" class="hover-target" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;">
-                    <i class="fas fa-envelope" style="font-size: 2.5rem; margin-bottom: 0.5rem; display: block;"></i>
-                    <span>Email</span>
-                </a>
-                <a href="#" class="hover-target" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;">
-                    <i class="fab fa-twitter" style="font-size: 2.5rem; margin-bottom: 0.5rem; display: block;"></i>
-                    <span>Twitter</span>
-                </a>
-                <a href="#" class="hover-target" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;">
-                    <i class="fab fa-linkedin" style="font-size: 2.5rem; margin-bottom: 0.5rem; display: block;"></i>
-                    <span>LinkedIn</span>
-                </a>
+                <div class="contact-link wechat-link hover-target" role="button" tabindex="0">
+                    <div class="contact-icon"><i class="fab fa-weixin"></i></div>
+                    <span>微信联系</span>
+                    <div class="qr-popup">
+                        <img src="images/微信图片_20260115143942_95_87.jpg" alt="WeChat QR" class="wechat-qr">
+                        <small>扫码添加</small>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
