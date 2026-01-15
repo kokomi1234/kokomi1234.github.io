@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>块稀疏自注意力算子性能小记 | 郑梓辉</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #e2e8f0;
+            --primary: #3b82f6;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(15, 23, 42, 0.8);
+        }
+        
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: 0.3s;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a:hover { color: var(--primary); }
+
+        .article-hero {
+            padding: 140px 0 60px;
+            text-align: center;
+        }
+
+        .article-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+
+        .article-tag {
+            padding: 6px 16px;
+            background: rgba(139,92,246,0.2);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            display: inline-block;
+        }
+
+        .article-content {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 4rem;
+            margin-bottom: 4rem;
+            line-height: 2;
+        }
+
+        .article-content h2 {
+            font-size: 1.8rem;
+            margin: 2.5rem 0 1rem;
+            color: var(--accent);
+        }
+
+        .article-content h3 {
+            font-size: 1.4rem;
+            margin: 2rem 0 1rem;
+            color: var(--primary);
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .article-content ul, .article-content ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.8rem;
+        }
+
+        .article-content code {
+            background: rgba(59,130,246,0.15);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #cbd5f5;
+        }
+
+        .article-content pre {
+            background: rgba(0,0,0,0.4);
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 3rem;
+            color: var(--primary);
+            text-decoration: none;
+            transition: 0.3s;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        footer {
+            background: rgba(15, 23, 42, 0.8);
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+
+        footer p {
+            color: #64748b;
+        }
+
+        footer p:first-child {
+            margin-bottom: 1rem;
+        }
+
+        footer p:last-child {
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .article-title { font-size: 1.8rem; }
+            .article-content { padding: 2rem; }
+            .article-meta { flex-direction: column; gap: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+
+    <nav>
+        <div class="container">
+            <div class="logo"><i class="fas fa-code"></i> blog</div>
+            <ul class="nav-links">
+                <li><a href="index.html#home">首页</a></li>
+                <li><a href="index.html#projects">项目</a></li>
+                <li><a href="blog.html">博客</a></li>
+                <li><a href="index.html#about">关于</a></li>
+                <li><a href="index.html#contact">联系</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="article-hero">
+        <div class="container">
+            <a href="blog.html" class="back-link"><i class="fas fa-arrow-left"></i> 返回博客</a>
+            <span class="article-tag">算子优化</span>
+            <h1 class="article-title">块稀疏自注意力算子性能小记</h1>
+            <div class="article-meta">
+                <span><i class="far fa-calendar"></i> 2025-11-10</span>
+                <span><i class="fas fa-user"></i> 郑梓辉</span>
+                <span><i class="far fa-eye"></i> 980</span>
+            </div>
+        </div>
+    </section>
+
+    <article class="container">
+        <div class="article-content">
+            <h2>引言</h2>
+            <p>
+                在长序列模型的推理过程中，标准自注意力机制的平方级复杂度成为严重的性能瓶颈。
+                块稀疏自注意力通过限制注意力计算的作用范围，在保留表达能力的同时显著降低计算成本。
+                本文记录了我在优化该算子过程中遇到的带宽瓶颈、内存对齐问题以及不同优化方案的权衡。
+            </p>
+
+            <h2>块稀疏自注意力原理</h2>
+            <p>
+                相比标准注意力对所有位置的计算，块稀疏注意力仅在固定大小的块内进行：
+            </p>
+            <ul>
+                <li><strong>局部注意力</strong>：每个位置只关注相邻的 k 个位置</li>
+                <li><strong>跨块注意力</strong>：引入少量全局位置实现长距离依赖</li>
+                <li><strong>复杂度</strong>：从 O(n²) 降低到 O(n·k)，其中 k 为块大小</li>
+            </ul>
+
+            <h2>性能瓶颈分析</h2>
+
+            <h3>1. 带宽瓶颈</h3>
+            <p>
+                尽管块稀疏注意力减少了计算量，但在 GPU 上仍然受到内存带宽的限制。
+                通过 NVIDIA Profiler 分析，发现大部分时间花在数据搬运上。
+            </p>
+
+            <h3>2. 内存不对齐</h3>
+            <p>
+                块的索引和分组操作容易导致内存访问模式不规则，影响缓存效率。
+                我们通过重新设计数据布局和索引方案来改善这个问题。
+            </p>
+
+            <h2>优化方案对比</h2>
+
+            <h3>方案 A：纯 CUDA 实现</h3>
+            <p>
+                完全掌控内存和计算流程，但代码复杂度高，debug 困难。
+            </p>
+
+            <h3>方案 B：Triton 实现</h3>
+            <p>
+                使用 Triton 高层抽象，减少底层细节处理，代码简洁但灵活性受限。
+            </p>
+
+            <pre><code>@triton.jit
+def block_sparse_attention(
+    Q, K, V, output,
+    stride_qz, stride_qh, stride_qm, stride_qk,
+    block_size: tl.constexpr,
+):
+    # 核心实现逻辑
+    pass</code></pre>
+
+            <h2>实验结果</h2>
+            <ul>
+                <li><strong>序列长度 4096</strong>：加速 2.5 倍</li>
+                <li><strong>序列长度 8192</strong>：加速 4.2 倍</li>
+                <li><strong>峰值内存节省</strong>：60% 相比标准注意力</li>
+            </ul>
+
+            <h2>总结与展望</h2>
+            <p>
+                块稀疏注意力在理论和实践中都证明了其价值，但优化空间仍然巨大。
+                未来可以探索动态块大小、自适应稀疏模式等更高级的优化方向。
+            </p>
+        </div>
+    </article>
+
+    <footer>
+        <div class="container">
+            <p><i class="fas fa-code"></i> 用心编码，创造价值</p>
+            <p>&copy; 2025 Zheng Zihui. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let particles = [];
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.color = `rgba(59, 130, 246, ${Math.random() * 0.5 + 0.2})`;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const particleCount = Math.min(window.innerWidth * window.innerHeight / 10000, 100);
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach((p, index) => {
+                p.update();
+                p.draw();
+                
+                for (let j = index; j < particles.length; j++) {
+                    const dx = p.x - particles[j].x;
+                    const dy = p.y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(139, 92, 246, ${1 - distance/100})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+
+        initParticles();
+        animate();
+    </script>
+</body>
+</html>
