@@ -3,64 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevBlog | 极客空间</title>
-    <!-- 依然保留 FontAwesome 图标，这是唯一的外部依赖，通常国内也能访问 -->
+    <meta name="description" content="郑梓辉 — AI / Agent 工程师，专注 RAG 检索增强、Multi-Agent 系统、数据采集与算子优化">
+    <title>郑梓辉 | AI / Agent 工程师</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/common.css">
     
     <style>
-        /* ==================== 
-           1. 基础重置 & 变量 
+        /* ====================
+           index.html 专有样式
+           通用部分已在 common.css 中
            ==================== */
-        :root {
-            --bg-color: #0f172a; /* 深蓝黑背景 */
-            --text-color: #e2e8f0;
-            --primary: #3b82f6;  /* 科技蓝 */
-            --secondary: #8b5cf6; /* 紫色 */
-            --accent: #06b6d4;    /* 青色 */
-            --glass-bg: rgba(30, 41, 59, 0.7);
-            --border-color: rgba(255, 255, 255, 0.1);
-        }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            cursor: none; /* 隐藏默认鼠标 */
-        }
-
-        body {
-            font-family: system-ui, -apple-system, sans-serif; /* 使用系统字体，最快最稳 */
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        html { scroll-behavior: smooth; }
-
-        /* ==================== 
-           2. 炫酷背景 Canvas 
-           ==================== */
-        #particles-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1; /* 确保在最底层，不挡鼠标点击 */
-            background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%);
-        }
-
-        /* ==================== 
-           3. 自定义鼠标 (JS驱动)
-           ==================== */
+        /* 自定义鼠标 */
         .cursor-dot, .cursor-outline {
             position: fixed;
             top: 0; left: 0;
             transform: translate(-50%, -50%);
             border-radius: 50%;
             z-index: 9999;
-            pointer-events: none; /* 关键：让鼠标穿透，不挡点击 */
+            pointer-events: none;
         }
 
         .cursor-dot {
@@ -74,65 +36,12 @@
             transition: width 0.2s, height 0.2s, background 0.2s;
         }
 
-        /* 鼠标悬停态 */
         body.hover-active .cursor-outline {
             width: 70px; height: 70px;
             background: rgba(59, 130, 246, 0.1);
             border-color: var(--secondary);
             backdrop-filter: blur(2px);
         }
-
-        /* ==================== 
-           4. 布局与组件 
-           ==================== */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* 导航栏 */
-        nav {
-            position: fixed;
-            top: 0; width: 100%;
-            padding: 1.5rem 0;
-            z-index: 100;
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-            background: rgba(15, 23, 42, 0.8);
-        }
-        
-        nav .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            color: transparent;
-            letter-spacing: 1px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 3.5rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-color);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.05rem;
-            transition: 0.3s;
-            letter-spacing: 0.5px;
-        }
-
-        .nav-links a:hover { color: var(--primary); }
 
         /* Hero 区域 */
         .hero {
@@ -277,11 +186,7 @@
             font-size: 0.75rem;
             color: #cbd5f5;
         }
-        .glitch-text {
-            position: relative;
-            display: inline-block;
-        }
-        
+
         .hero p {
             font-size: 1.2rem;
             color: #94a3b8;
@@ -388,9 +293,13 @@
         /* 移动端适配 */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
-            .cursor-dot, .cursor-outline { display: none; } /* 手机端禁用自定义鼠标 */
-            * { cursor: auto; }
-            .nav-links { display: none; } /* 简化处理：手机端隐藏菜单 */
+            .cursor-dot, .cursor-outline { display: none; }
+        }
+
+        /* 非触屏设备才隐藏默认鼠标 */
+        @media (hover: hover) and (pointer: fine) {
+            body { cursor: none; }
+            body * { cursor: none; }
         }
     </style>
 </head>
@@ -413,6 +322,9 @@
                 <li><a href="#about" class="hover-target">关于</a></li>
                 <li><a href="#contact" class="hover-target">联系</a></li>
             </ul>
+            <div class="hamburger" aria-label="菜单" role="button" tabindex="0">
+                <span></span><span></span><span></span>
+            </div>
         </div>
     </nav>
 
@@ -425,7 +337,7 @@
                     <span style="color: var(--accent)">AI / Agent 工程师</span>
                 </h1>
                 <div class="avatar-wrap reveal-text">
-                    <img src="images/avatar.jpg" alt="Zheng Zihui" class="avatar-img">
+                    <img src="images/avatar.jpg" alt="Zheng Zihui" class="avatar-img" loading="lazy">
                 </div>
                 <p style="color: #64748b; font-size: 0.95rem; max-width: 520px; margin: 0 auto 2rem; line-height: 1.7;">
                     专注 RAG 检索增强、Multi-Agent 系统、数据采集与算子优化<br>
@@ -630,7 +542,7 @@
                     <div class="contact-icon"><i class="fab fa-weixin"></i></div>
                     <span>微信联系</span>
                     <div class="qr-popup">
-                        <img src="images/微信图片_20260115143942_95_87.jpg" alt="WeChat QR" class="wechat-qr">
+                        <img src="images/微信图片_20260115143942_95_87.jpg" alt="WeChat QR" class="wechat-qr" loading="lazy">
                         <small>扫码添加</small>
                     </div>
                 </div>
@@ -639,127 +551,37 @@
     </section>
 
     <!-- 页脚 -->
-    <footer style="background: rgba(15, 23, 42, 0.8); padding: 2rem 0; text-align: center; border-top: 1px solid var(--border-color);">
+    <footer class="site-footer">
         <div class="container">
-            <p style="color: #64748b; margin-bottom: 1rem;">
-                <i class="fas fa-code"></i> 用工程化手段让 AI 落地
-            </p>
-            <p style="color: #475569; font-size: 0.9rem;">
-                &copy; 2025 Zihui Zheng. Built with passion.
-            </p>
+            <p><i class="fas fa-code"></i> 用工程化手段让 AI 落地</p>
+            <p style="color: #475569; font-size: 0.9rem;">&copy; 2025 Zihui Zheng. Built with passion.</p>
         </div>
     </footer>
 
-    <script>
-        /* ==================== 
-           JS 逻辑中心 
-           ==================== */
+    <!-- 通用：粒子 + 汉堡菜单 -->
+    <script src="js/common.js"></script>
 
-        // 1. 鼠标跟随逻辑
+    <script>
+        /* 自定义鼠标跟随（index 专有） */
         const cursorDot = document.querySelector('.cursor-dot');
         const cursorOutline = document.querySelector('.cursor-outline');
-        
-        // 检查是否为移动设备
         const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
         if (!isMobile) {
             window.addEventListener('mousemove', (e) => {
-                const posX = e.clientX;
-                const posY = e.clientY;
-
-                // 点点瞬间移动
-                cursorDot.style.left = `${posX}px`;
-                cursorDot.style.top = `${posY}px`;
-
-                // 圆圈缓慢动画
-                cursorOutline.animate({
-                    left: `${posX}px`,
-                    top: `${posY}px`
-                }, { duration: 500, fill: "forwards" });
+                cursorDot.style.left = `${e.clientX}px`;
+                cursorDot.style.top = `${e.clientY}px`;
+                cursorOutline.animate(
+                    { left: `${e.clientX}px`, top: `${e.clientY}px` },
+                    { duration: 500, fill: "forwards" }
+                );
             });
 
-            // 鼠标交互放大效果
             document.querySelectorAll('.hover-target, a, button').forEach(el => {
                 el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
                 el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
             });
         }
-
-        // 2. Canvas 粒子星空背景
-        const canvas = document.getElementById('particles-canvas');
-        const ctx = canvas.getContext('2d');
-        
-        let particles = [];
-        
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * 1 - 0.5;
-                this.color = `rgba(59, 130, 246, ${Math.random() * 0.5 + 0.2})`; // 蓝色带透明
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            const particleCount = Math.min(window.innerWidth * window.innerHeight / 10000, 100);
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            particles.forEach((p, index) => {
-                p.update();
-                p.draw();
-                
-                // 连线效果
-                for (let j = index; j < particles.length; j++) {
-                    const dx = p.x - particles[j].x;
-                    const dy = p.y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance < 100) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(139, 92, 246, ${1 - distance/100})`; // 紫色连线
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-            });
-            requestAnimationFrame(animate);
-        }
-
-        initParticles();
-        animate();
     </script>
 </body>
 </html>

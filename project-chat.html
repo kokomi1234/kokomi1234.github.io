@@ -1,69 +1,29 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>实时聊天应用 | DevBlog</title>
+    <meta name="description" content="AI 工程工具链 — 基于 FastAPI + LangChain 的 LLM 应用工具链，集成日志追踪、指标监控与 Agent 编排，方便调试和复现">
+    <title>AI 工程工具链 | blog</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link rel="stylesheet" href="css/common.css">
+
     <style>
-        :root {
-            --bg-color: #0f172a;
-            --text-color: #e2e8f0;
-            --primary: #3b82f6;
-            --secondary: #8b5cf6;
-            --accent: #06b6d4;
-            --glass-bg: rgba(30, 41, 59, 0.7);
-            --border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            cursor: none;
-        }
-
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        html { scroll-behavior: smooth; }
-
-        #particles-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%);
-        }
+        /* project-chat.html 专有样式 */
 
         .cursor-dot, .cursor-outline {
-            position: fixed;
-            top: 0; left: 0;
+            position: fixed; top: 0; left: 0;
             transform: translate(-50%, -50%);
-            border-radius: 50%;
-            z-index: 9999;
+            border-radius: 50%; z-index: 9999;
             pointer-events: none;
         }
-
-        .cursor-dot {
-            width: 8px; height: 8px;
-            background: var(--accent);
-        }
-
+        .cursor-dot { width: 8px; height: 8px; background: var(--accent); }
         .cursor-outline {
             width: 40px; height: 40px;
             border: 2px solid var(--primary);
             transition: width 0.2s, height 0.2s, background 0.2s;
         }
-
         body.hover-active .cursor-outline {
             width: 70px; height: 70px;
             background: rgba(59, 130, 246, 0.1);
@@ -71,249 +31,125 @@
             backdrop-filter: blur(2px);
         }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
+        .project-hero {
+            padding: 2rem 0 3rem; text-align: center; position: relative;
+        }
+        .project-hero::after {
+            content: ''; position: absolute; bottom: 0; left: 10%; right: 10%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--border-color), transparent);
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 18px;
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50px; color: var(--primary);
+            font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem;
+        }
+        .project-hero h1 {
+            font-size: 3.2rem; margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text; color: transparent; line-height: 1.2;
+        }
+        .project-hero .subtitle {
+            font-size: 1.15rem; color: #94a3b8;
+            max-width: 750px; margin: 0 auto 2rem; line-height: 1.8;
+        }
+        .hero-tags { display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
+        .hero-tags .tag {
+            padding: 6px 16px; background: var(--glass-bg);
+            border: 1px solid var(--border-color); border-radius: 20px;
+            font-size: 0.85rem; transition: all 0.3s;
+        }
+        .hero-tags .tag:hover { border-color: var(--primary); background: rgba(59,130,246,0.1); }
+        .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+        .btn { display: inline-flex; align-items: center; gap: 8px; }
+        .btn-outline { background: transparent; border: 2px solid var(--primary); }
+        .btn-outline:hover { background: rgba(59,130,246,0.1); }
+
+        .section-heading {
+            font-size: 1.8rem; font-weight: 700; margin: 3.5rem 0 1.5rem;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .section-heading i { font-size: 1.4rem; color: var(--accent); }
+        .section-heading::after {
+            content: ''; flex: 1; height: 1px;
+            background: linear-gradient(to right, var(--border-color), transparent);
+            margin-left: 12px;
         }
 
-        nav {
-            position: fixed;
-            top: 0; width: 100%;
-            padding: 1.5rem 0;
-            z-index: 100;
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-            background: rgba(15, 23, 42, 0.8);
-        }
-        
-        nav .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .card { margin: 1.5rem 0; }
+        .card:hover { border-color: rgba(59,130,246,0.3); }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            color: transparent;
+        .arch-diagram {
+            background: rgba(15,23,42,0.9); border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 2.5rem; margin: 1.5rem 0; overflow-x: auto;
         }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-color);
-            text-decoration: none;
-            font-weight: 500;
-            transition: 0.3s;
-        }
-
-        .nav-links a:hover { color: var(--primary); }
-
-        .breadcrumb {
-            margin-top: 100px;
-            padding: 1rem 0;
-            color: #94a3b8;
-            font-size: 0.9rem;
-        }
-
-        .breadcrumb a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-
-        .breadcrumb a:hover {
-            color: var(--primary);
-        }
-
-        .project-header {
-            padding: 3rem 0;
-            text-align: center;
-        }
-
-        .project-header h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(to right, #10b981, #06b6d4);
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-
-        .project-header p {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            max-width: 700px;
-            margin: 0 auto 2rem;
-        }
-
-        .tags {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .tag {
-            padding: 0.5rem 1rem;
-            background: var(--glass-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            font-size: 0.9rem;
-        }
-
-        .card {
-            background: var(--glass-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            margin: 2rem 0;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            border-color: var(--primary);
-        }
-
-        .section-title {
-            font-size: 2rem;
-            margin: 3rem 0 1.5rem;
-            color: #10b981;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .feature-item {
-            background: var(--glass-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
+        .arch-layers { display: flex; flex-direction: column; gap: 1.2rem; }
+        .arch-layer {
+            display: flex; align-items: center; gap: 1rem;
+            padding: 1rem 1.5rem; border-radius: 12px; border-left: 3px solid;
             transition: all 0.3s;
         }
+        .arch-layer:hover { transform: translateX(8px); }
+        .arch-layer.api { background: rgba(59,130,246,0.08); border-color: var(--primary); }
+        .arch-layer.agent { background: rgba(139,92,246,0.08); border-color: var(--secondary); }
+        .arch-layer.observe { background: rgba(6,182,212,0.08); border-color: var(--accent); }
+        .arch-layer.infra { background: rgba(245,158,11,0.08); border-color: #f59e0b; }
+        .arch-layer-icon {
+            width: 42px; height: 42px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; flex-shrink: 0;
+        }
+        .api .arch-layer-icon { background: rgba(59,130,246,0.2); color: var(--primary); }
+        .agent .arch-layer-icon { background: rgba(139,92,246,0.2); color: var(--secondary); }
+        .observe .arch-layer-icon { background: rgba(6,182,212,0.2); color: var(--accent); }
+        .infra .arch-layer-icon { background: rgba(245,158,11,0.2); color: #f59e0b; }
+        .arch-layer-content h4 { font-size: 1rem; margin-bottom: 0.25rem; }
+        .arch-layer-content p { font-size: 0.85rem; color: #94a3b8; }
+        .arch-arrow { text-align: center; font-size: 1.2rem; color: #475569; margin: -0.4rem 0; }
 
-        .feature-item:hover {
-            transform: translateY(-5px);
-            border-color: #10b981;
+        .feature-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.2rem; margin: 1.5rem 0;
         }
+        .feature-item {
+            background: var(--glass-bg); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 1.5rem; transition: all 0.3s;
+        }
+        .feature-item:hover { transform: translateY(-4px); border-color: var(--accent); }
+        .feature-item i { font-size: 1.8rem; margin-bottom: 0.8rem; display: block; }
+        .feature-item:nth-child(1) i { color: var(--primary); }
+        .feature-item:nth-child(2) i { color: var(--accent); }
+        .feature-item:nth-child(3) i { color: #10b981; }
+        .feature-item:nth-child(4) i { color: #f59e0b; }
+        .feature-item h3 { font-size: 1.05rem; margin-bottom: 0.4rem; }
+        .feature-item p { font-size: 0.88rem; color: #94a3b8; line-height: 1.6; }
 
-        .feature-item i {
-            font-size: 2.5rem;
-            color: #10b981;
-            margin-bottom: 1rem;
+        .highlight-box {
+            background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.2);
+            border-radius: 12px; padding: 1.5rem 2rem; margin: 1.5rem 0;
         }
+        .highlight-box h4 {
+            color: var(--primary); margin-bottom: 0.8rem;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .highlight-box p, .highlight-box li { font-size: 0.92rem; color: #94a3b8; line-height: 1.7; }
+        .highlight-box ul { list-style: none; margin-top: 0.5rem; }
+        .highlight-box li { padding: 0.3rem 0 0.3rem 1.5rem; position: relative; }
+        .highlight-box li::before { content: '\2192'; position: absolute; left: 0; color: var(--primary); }
 
-        .feature-item h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .feature-item p {
-            color: #94a3b8;
-            font-size: 0.9rem;
-        }
-
-        .tech-stack {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin: 1.5rem 0;
-        }
-
-        .tech-item {
-            padding: 0.7rem 1.5rem;
-            background: linear-gradient(135deg, #10b981, #06b6d4);
-            border-radius: 25px;
-            font-weight: 500;
-            transition: transform 0.3s;
-        }
-
-        .tech-item:hover {
-            transform: translateY(-3px) scale(1.05);
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .stat-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #10b981;
-        }
-
-        .stat-label {
-            color: #94a3b8;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background: linear-gradient(90deg, #10b981, #06b6d4);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            transition: transform 0.3s;
-            margin: 0.5rem;
-        }
-        
-        .btn:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3); 
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid #10b981;
-        }
-
-        .code-block {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            overflow-x: auto;
-        }
-
-        .code-block code {
-            color: #10b981;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-        }
+        .back-section { text-align: center; padding: 3rem 0 5rem; }
 
         @media (max-width: 768px) {
-            .project-header h1 { font-size: 2rem; }
+            .project-hero h1 { font-size: 2rem; }
             .cursor-dot, .cursor-outline { display: none; }
-            * { cursor: auto; }
-            .nav-links { display: none; }
-            .stats { grid-template-columns: 1fr 1fr; }
+        }
+        @media (hover: hover) and (pointer: fine) {
+            body { cursor: none; }
+            body * { cursor: none; }
         }
     </style>
 </head>
@@ -324,196 +160,171 @@
 
     <nav>
         <div class="container">
-            <div class="logo"><i class="fas fa-code"></i> Dev.IO</div>
+            <div class="logo"><i class="fas fa-code"></i> blog</div>
             <ul class="nav-links">
                 <li><a href="index.html" class="hover-target">首页</a></li>
                 <li><a href="index.html#projects" class="hover-target">项目</a></li>
                 <li><a href="index.html#blog" class="hover-target">博客</a></li>
                 <li><a href="index.html#about" class="hover-target">关于</a></li>
+                <li><a href="index.html#contact" class="hover-target">联系</a></li>
             </ul>
+            <div class="hamburger" aria-label="菜单" role="button" tabindex="0">
+                <span></span><span></span><span></span>
+            </div>
         </div>
     </nav>
 
     <div class="container">
         <div class="breadcrumb">
-            <a href="index.html" class="hover-target"><i class="fas fa-home"></i> 首页</a> / 
-            <a href="index.html#projects" class="hover-target">项目</a> / 
-            <span>实时聊天应用</span>
+            <a href="index.html" class="hover-target"><i class="fas fa-home"></i> 首页</a> /
+            <a href="index.html#projects" class="hover-target">项目</a> /
+            <span>AI 工程工具链</span>
         </div>
 
-        <div class="project-header">
-            <h1>实时聊天应用</h1>
-            <p>基于WebSocket的现代化实时通讯应用，支持私聊、群聊、文件传输、消息撤回等功能，为用户提供流畅的即时通讯体验。</p>
-            <div class="tags">
-                <span class="tag"><i class="fab fa-react"></i> React</span>
-                <span class="tag"><i class="fas fa-plug"></i> Socket.io</span>
-                <span class="tag"><i class="fab fa-node-js"></i> Node.js</span>
-                <span class="tag"><i class="fas fa-database"></i> Redis</span>
-                <span class="tag"><i class="fas fa-lock"></i> JWT</span>
+        <section class="project-hero">
+            <div class="hero-badge">
+                <i class="fas fa-bolt"></i> LLM 工程 · 个人实践
             </div>
-            <div style="margin-top: 2rem;">
+            <h1>AI 工程工具链</h1>
+            <p class="subtitle">
+                围绕 LLM 应用的全链路工具链实践：
+                <strong style="color: var(--accent);">FastAPI 做推理服务</strong>、
+                <strong style="color: var(--secondary);">LangChain 编排 Agent</strong>、
+                加上日志追踪和指标监控，方便调试和复现。
+            </p>
+            <div class="hero-tags">
+                <span class="tag"><i class="fab fa-python"></i> Python</span>
+                <span class="tag"><i class="fas fa-bolt"></i> FastAPI</span>
+                <span class="tag"><i class="fas fa-link"></i> LangChain</span>
+                <span class="tag"><i class="fas fa-chart-line"></i> Prometheus</span>
+                <span class="tag"><i class="fas fa-search"></i> Jaeger</span>
+                <span class="tag"><i class="fab fa-docker"></i> Docker Compose</span>
+            </div>
+            <div class="hero-actions">
                 <a href="https://github.com/kokomi1234" class="btn hover-target" target="_blank">
                     <i class="fab fa-github"></i> 查看源码
                 </a>
-                <a href="#" class="btn btn-outline hover-target">
-                    <i class="fas fa-external-link-alt"></i> 在线演示
+                <a href="index.html#projects" class="btn btn-outline hover-target">
+                    <i class="fas fa-list"></i> 所有项目
                 </a>
             </div>
+        </section>
+
+        <h2 class="section-heading"><i class="fas fa-layer-group"></i> 整体架构</h2>
+        <div class="arch-diagram">
+            <div class="arch-layers">
+                <div class="arch-layer api">
+                    <div class="arch-layer-icon"><i class="fas fa-bolt"></i></div>
+                    <div class="arch-layer-content">
+                        <h4>API 服务层 — FastAPI</h4>
+                        <p>异步高性能推理接口，Pydantic 参数校验，自动 OpenAPI 文档</p>
+                    </div>
+                </div>
+                <div class="arch-arrow">↕</div>
+                <div class="arch-layer agent">
+                    <div class="arch-layer-icon"><i class="fas fa-robot"></i></div>
+                    <div class="arch-layer-content">
+                        <h4>Agent 编排层 — LangChain</h4>
+                        <p>Chain / Agent / Tool 三层抽象，支持 ReAct、Plan-and-Execute 等策略</p>
+                    </div>
+                </div>
+                <div class="arch-arrow">↕</div>
+                <div class="arch-layer observe">
+                    <div class="arch-layer-icon"><i class="fas fa-eye"></i></div>
+                    <div class="arch-layer-content">
+                        <h4>可观测性层 — Traces + Metrics</h4>
+                        <p>OpenTelemetry 自动注入 span，Prometheus 采集 token/latency/error 指标</p>
+                    </div>
+                </div>
+                <div class="arch-arrow">↕</div>
+                <div class="arch-layer infra">
+                    <div class="arch-layer-icon"><i class="fab fa-docker"></i></div>
+                    <div class="arch-layer-content">
+                        <h4>基础设施层 — Docker Compose</h4>
+                        <p>一键拉起 API + Jaeger + Prometheus + Grafana，开发环境秒启动</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="stats">
-            <div class="stat-card">
-                <div class="stat-number">2K+</div>
-                <div class="stat-label">在线用户</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">50ms</div>
-                <div class="stat-label">消息延迟</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">99%</div>
-                <div class="stat-label">消息送达率</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">24/7</div>
-                <div class="stat-label">服务可用</div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2 class="section-title"><i class="fas fa-info-circle"></i> 项目简介</h2>
-            <p style="font-size: 1.1rem; line-height: 1.8; color: #94a3b8;">
-                在移动互联网时代，即时通讯已经成为人们日常沟通的重要方式。本项目采用WebSocket技术实现全双工通信，确保消息的实时性和可靠性。
-            </p>
-            <p style="font-size: 1.1rem; line-height: 1.8; color: #94a3b8; margin-top: 1rem;">
-                系统前端使用React构建现代化界面，后端采用Node.js + Socket.io实现WebSocket服务，配合Redis进行消息队列和会话管理，保证高并发场景下的系统稳定性。
-            </p>
-        </div>
-
-        <h2 class="section-title"><i class="fas fa-star"></i> 核心功能</h2>
+        <h2 class="section-heading"><i class="fas fa-star"></i> 核心能力</h2>
         <div class="feature-grid">
             <div class="feature-item">
-                <i class="fas fa-comments"></i>
-                <h3>私聊 & 群聊</h3>
-                <p>支持一对一私聊和多人群聊，消息实时同步到所有在线设备</p>
+                <i class="fas fa-bolt"></i>
+                <h3>FastAPI 推理服务</h3>
+                <p>异步 ASGI 服务，流式返回 SSE，自带 /docs 交互文档，方便前端对接和测试。</p>
             </div>
             <div class="feature-item">
-                <i class="fas fa-file-upload"></i>
-                <h3>文件传输</h3>
-                <p>支持图片、文档、视频等多种文件类型的发送和接收</p>
+                <i class="fas fa-robot"></i>
+                <h3>LangChain Agent 编排</h3>
+                <p>通过 Tool 注册和 Prompt 模板实现灵活的 Agent 逻辑，支持多轮对话和工具调用。</p>
             </div>
             <div class="feature-item">
-                <i class="fas fa-history"></i>
-                <h3>消息历史</h3>
-                <p>完整的消息记录，支持搜索和导出，云端永久保存</p>
+                <i class="fas fa-search"></i>
+                <h3>分布式链路追踪</h3>
+                <p>OpenTelemetry SDK 自动注入 trace_id / span_id，Jaeger 可视化调用链路和耗时。</p>
             </div>
             <div class="feature-item">
-                <i class="fas fa-undo"></i>
-                <h3>消息撤回</h3>
-                <p>2分钟内可撤回已发送消息，支持删除和编辑</p>
-            </div>
-            <div class="feature-item">
-                <i class="fas fa-video"></i>
-                <h3>音视频通话</h3>
-                <p>基于WebRTC的高清音视频通话功能</p>
-            </div>
-            <div class="feature-item">
-                <i class="fas fa-smile"></i>
-                <h3>表情 & 贴纸</h3>
-                <p>丰富的表情包和动态贴纸，让聊天更有趣</p>
+                <i class="fas fa-chart-line"></i>
+                <h3>指标监控 & 告警</h3>
+                <p>Prometheus 采集 token 用量、P95 延迟、错误率，Grafana 面板一目了然。</p>
             </div>
         </div>
 
+        <h2 class="section-heading"><i class="fas fa-wrench"></i> 工程实践要点</h2>
         <div class="card">
-            <h2 class="section-title"><i class="fas fa-cogs"></i> 技术架构</h2>
-            <h3 style="color: #10b981; margin: 1.5rem 0 1rem;">前端技术</h3>
-            <div class="tech-stack">
-                <span class="tech-item"><i class="fab fa-react"></i> React</span>
-                <span class="tech-item"><i class="fas fa-code"></i> TypeScript</span>
-                <span class="tech-item"><i class="fas fa-plug"></i> Socket.io Client</span>
-                <span class="tech-item"><i class="fas fa-palette"></i> Ant Design</span>
-                <span class="tech-item"><i class="fas fa-layer-group"></i> Redux</span>
-            </div>
-            
-            <h3 style="color: #10b981; margin: 1.5rem 0 1rem;">后端技术</h3>
-            <div class="tech-stack">
-                <span class="tech-item"><i class="fab fa-node-js"></i> Node.js</span>
-                <span class="tech-item"><i class="fas fa-plug"></i> Socket.io</span>
-                <span class="tech-item"><i class="fas fa-database"></i> MongoDB</span>
-                <span class="tech-item"><i class="fas fa-memory"></i> Redis</span>
-                <span class="tech-item"><i class="fas fa-server"></i> Express</span>
-            </div>
-            
-            <h3 style="color: #10b981; margin: 1.5rem 0 1rem;">其他技术</h3>
-            <div class="tech-stack">
-                <span class="tech-item"><i class="fas fa-video"></i> WebRTC</span>
-                <span class="tech-item"><i class="fas fa-lock"></i> JWT认证</span>
-                <span class="tech-item"><i class="fab fa-docker"></i> Docker</span>
-                <span class="tech-item"><i class="fab fa-aws"></i> AWS S3</span>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2 class="section-title"><i class="fas fa-code"></i> 技术实现</h2>
-            <h3 style="color: #10b981; margin: 1.5rem 0 1rem;">WebSocket连接</h3>
-            <div class="code-block">
-                <code>
-// Socket.io连接示例<br>
-const socket = io('wss://chat.example.com', {<br>
-&nbsp;&nbsp;auth: { token: userToken },<br>
-&nbsp;&nbsp;transports: ['websocket']<br>
-});<br><br>
-
-socket.on('message', (data) => {<br>
-&nbsp;&nbsp;console.log('收到新消息:', data);<br>
-&nbsp;&nbsp;updateMessageList(data);<br>
-});<br><br>
-
-socket.emit('sendMessage', {<br>
-&nbsp;&nbsp;to: userId,<br>
-&nbsp;&nbsp;content: message,<br>
-&nbsp;&nbsp;type: 'text'<br>
-});
-                </code>
-            </div>
-
-            <h3 style="color: #10b981; margin: 1.5rem 0 1rem;">消息队列处理</h3>
-            <p style="color: #94a3b8; margin: 1rem 0;">
-                使用Redis的Pub/Sub模式实现消息分发，确保多服务器环境下的消息同步。当用户发送消息时，服务器将消息发布到Redis频道，所有订阅该频道的服务器实例都会收到消息并推送给相应的客户端。
+            <p style="font-size: 1rem; color: #94a3b8; line-height: 1.8;">
+                这个工具链并不是一个独立的产品，而是我在做 LLM 应用时沉淀下来的一套工程方法。
+                主要解决三个痛点：<strong style="color: var(--text-color)">调试难</strong>（大模型中间过程不透明）、
+                <strong style="color: var(--text-color)">复现难</strong>（随机性大、参数多）、
+                <strong style="color: var(--text-color)">监控难</strong>（token 消耗和延迟不可控）。
             </p>
         </div>
 
-        <div class="card">
-            <h2 class="section-title"><i class="fas fa-lightbulb"></i> 项目亮点</h2>
-            <ul style="font-size: 1.1rem; line-height: 2; color: #94a3b8; list-style: none;">
-                <li><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i> 采用Socket.io实现WebSocket通信，自动降级到轮询</li>
-                <li><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i> 消息队列确保消息不丢失，离线消息自动推送</li>
-                <li><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i> 实现消息已读/未读状态同步</li>
-                <li><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i> 支持表情、图片、文件等多种消息类型</li>
-                <li><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i> WebRTC点对点音视频通话，低延迟高质量</li>
-                <li><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i> 完善的消息加密机制，保护用户隐私</li>
+        <div class="highlight-box">
+            <h4><i class="fas fa-lightbulb"></i> 核心思路</h4>
+            <ul>
+                <li>所有 LLM 调用统一走 FastAPI 接口，方便加中间件做 trace 和计量</li>
+                <li>LangChain 的 callback 机制天然支持 token 统计和 step 日志</li>
+                <li>OpenTelemetry 自动插桩减少侵入性，trace 贯穿 API → Agent → Tool 调用</li>
+                <li>Prometheus + Grafana 做实时监控，可按模型/接口/用户维度聚合</li>
+                <li>Docker Compose 确保本地开发和 CI 环境一致，一条命令拉起全栈</li>
             </ul>
         </div>
 
         <div class="card">
-            <h2 class="section-title"><i class="fas fa-trophy"></i> 项目成果</h2>
-            <ul style="font-size: 1.1rem; line-height: 2; color: #94a3b8; list-style: none;">
-                <li><i class="fas fa-award" style="color: #f59e0b; margin-right: 0.5rem;"></i> 支持2000+用户同时在线</li>
-                <li><i class="fas fa-star" style="color: #f59e0b; margin-right: 0.5rem;"></i> 消息平均延迟低于50ms</li>
-                <li><i class="fas fa-users" style="color: #f59e0b; margin-right: 0.5rem;"></i> 日均消息量突破10万条</li>
-                <li><i class="fas fa-chart-line" style="color: #f59e0b; margin-right: 0.5rem;"></i> 系统可用性达99%以上</li>
-            </ul>
+            <h4 style="color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-code"></i> 典型使用场景
+            </h4>
+            <p style="font-size: 0.92rem; color: #94a3b8; line-height: 1.8; margin-bottom: 1rem;">
+                当一次 Agent 调用返回异常结果时，可以通过 Jaeger 查看完整调用链：
+            </p>
+            <div style="background: rgba(15,23,42,0.9); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem 2rem; font-family: 'Cascadia Code','Fira Code',monospace; font-size: 0.85rem; line-height: 2; color: #94a3b8; overflow-x: auto;">
+                <span style="color: var(--primary); font-weight: 600;">POST /v1/chat</span> → trace_id: abc123<br>
+                <span style="color: var(--accent);">├─ LangChain Agent.plan()</span> — 120ms<br>
+                <span style="color: #f59e0b;">│  ├─ Tool: search_knowledge_base</span> — 85ms<br>
+                <span style="color: #f59e0b;">│  └─ Tool: query_database</span> — 200ms ⚠️ 慢查询<br>
+                <span style="color: #10b981;">├─ LLM: qwen-max</span> — 1.2s, tokens: 850<br>
+                <span style="color: #10b981;">└─ Response</span> — 总耗时 1.6s
+            </div>
         </div>
 
-        <div style="text-align: center; padding: 3rem 0;">
+        <div class="back-section">
             <a href="index.html#projects" class="btn hover-target">
                 <i class="fas fa-arrow-left"></i> 返回项目列表
             </a>
         </div>
     </div>
 
+    <footer class="site-footer">
+        <div class="container">
+            <p><i class="fas fa-code"></i> 用工程化手段让 AI 落地</p>
+            <p style="color: #475569; font-size: 0.9rem;">&copy; 2025 Zihui Zheng. Built with passion.</p>
+        </div>
+    </footer>
+
+    <script src="js/common.js"></script>
     <script>
-        // 鼠标跟随逻辑
         const cursorDot = document.querySelector('.cursor-dot');
         const cursorOutline = document.querySelector('.cursor-outline');
         const isMobile = window.matchMedia("(max-width: 768px)").matches;
@@ -522,87 +333,16 @@ socket.emit('sendMessage', {<br>
             window.addEventListener('mousemove', (e) => {
                 cursorDot.style.left = `${e.clientX}px`;
                 cursorDot.style.top = `${e.clientY}px`;
-                cursorOutline.animate({
-                    left: `${e.clientX}px`,
-                    top: `${e.clientY}px`
-                }, { duration: 500, fill: "forwards" });
+                cursorOutline.animate(
+                    { left: `${e.clientX}px`, top: `${e.clientY}px` },
+                    { duration: 500, fill: "forwards" }
+                );
             });
-
             document.querySelectorAll('.hover-target, a, button').forEach(el => {
                 el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
                 el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
             });
         }
-
-        // Canvas粒子背景
-        const canvas = document.getElementById('particles-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * 1 - 0.5;
-                this.color = `rgba(16, 185, 129, ${Math.random() * 0.5 + 0.2})`;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            const particleCount = Math.min(window.innerWidth * window.innerHeight / 10000, 100);
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach((p, index) => {
-                p.update();
-                p.draw();
-                for (let j = index; j < particles.length; j++) {
-                    const dx = p.x - particles[j].x;
-                    const dy = p.y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < 100) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(6, 182, 212, ${1 - distance/100})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-            });
-            requestAnimationFrame(animate);
-        }
-
-        initParticles();
-        animate();
     </script>
 </body>
 </html>

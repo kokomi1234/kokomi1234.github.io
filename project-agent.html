@@ -3,41 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SuperBizAgent — 基于 Spring AI Alibaba 的智能运维 Agent 平台，Hybrid Search + Reranker 四阶段混合检索与三层 Agent 协作">
     <title>SuperBizAgent — 智能运维 Agent 平台 | blog</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/common.css">
     
     <style>
-        :root {
-            --bg-color: #0f172a;
-            --text-color: #e2e8f0;
-            --primary: #3b82f6;
-            --secondary: #8b5cf6;
-            --accent: #06b6d4;
-            --green: #10b981;
-            --amber: #f59e0b;
-            --glass-bg: rgba(30, 41, 59, 0.7);
-            --border-color: rgba(255, 255, 255, 0.1);
-        }
+        /* ====================
+           project-agent.html 专有样式
+           通用部分(变量/重置/Canvas/Nav/Card 基础)已在 common.css 中
+           ==================== */
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
-
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        html { scroll-behavior: smooth; }
-
-        #particles-canvas {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%);
-        }
-
+        /* 自定义鼠标 */
         .cursor-dot, .cursor-outline {
             position: fixed; top: 0; left: 0;
             transform: translate(-50%, -50%);
@@ -56,39 +34,6 @@
             border-color: var(--secondary);
             backdrop-filter: blur(2px);
         }
-
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-
-        /* Nav */
-        nav {
-            position: fixed; top: 0; width: 100%;
-            padding: 1.5rem 0; z-index: 100;
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-            background: rgba(15, 23, 42, 0.8);
-        }
-        nav .container { display: flex; justify-content: space-between; align-items: center; }
-        .logo {
-            font-size: 1.8rem; font-weight: 800;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text; color: transparent;
-            letter-spacing: 1px;
-        }
-        .nav-links { display: flex; gap: 3.5rem; list-style: none; }
-        .nav-links a {
-            color: var(--text-color); text-decoration: none;
-            font-weight: 600; font-size: 1.05rem;
-            transition: 0.3s; letter-spacing: 0.5px;
-        }
-        .nav-links a:hover { color: var(--primary); }
-
-        /* Breadcrumb */
-        .breadcrumb {
-            margin-top: 100px; padding: 1rem 0;
-            color: #94a3b8; font-size: 0.9rem;
-        }
-        .breadcrumb a { color: var(--accent); text-decoration: none; }
-        .breadcrumb a:hover { color: var(--primary); }
 
         /* Hero */
         .project-hero {
@@ -147,15 +92,10 @@
             display: flex; gap: 1rem;
             justify-content: center; flex-wrap: wrap;
         }
+        /* Btn overrides for this page */
         .btn {
             display: inline-flex; align-items: center; gap: 8px;
-            padding: 12px 28px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            color: white; text-decoration: none;
-            border-radius: 50px; font-weight: bold;
-            transition: transform 0.3s; border: none;
         }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3); }
         .btn-outline {
             background: transparent;
             border: 2px solid var(--primary);
@@ -180,17 +120,11 @@
             margin-left: 12px;
         }
 
-        /* Card */
+        /* Card override for project page */
         .card {
-            background: var(--glass-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px; padding: 2rem;
             margin: 1.5rem 0;
-            transition: transform 0.3s, box-shadow 0.3s;
         }
         .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 16px 40px rgba(0,0,0,0.25);
             border-color: rgba(59, 130, 246, 0.3);
         }
 
@@ -521,13 +455,16 @@
         @media (max-width: 768px) {
             .project-hero h1 { font-size: 2rem; }
             .cursor-dot, .cursor-outline { display: none; }
-            * { cursor: auto; }
-            .nav-links { display: none; }
             .pipeline { flex-direction: column; }
             .pipeline-step { border-radius: 12px !important; }
             .pipeline-step:not(:last-child)::after { display: none; }
             .agent-flow { flex-direction: column; }
             .agent-arrow { transform: rotate(90deg); }
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            body { cursor: none; }
+            body * { cursor: none; }
         }
     </style>
 </head>
@@ -546,6 +483,9 @@
                 <li><a href="index.html#about" class="hover-target">关于</a></li>
                 <li><a href="index.html#contact" class="hover-target">联系</a></li>
             </ul>
+            <div class="hamburger" aria-label="菜单" role="button" tabindex="0">
+                <span></span><span></span><span></span>
+            </div>
         </div>
     </nav>
 
@@ -892,8 +832,16 @@
         </div>
     </div>
 
+    <footer class="site-footer">
+        <div class="container">
+            <p><i class="fas fa-code"></i> 用工程化手段让 AI 落地</p>
+            <p style="color: #475569; font-size: 0.9rem;">&copy; 2025 Zihui Zheng. Built with passion.</p>
+        </div>
+    </footer>
+
+    <script src="js/common.js"></script>
     <script>
-        // 鼠标跟随
+        /* 自定义鼠标跟随（项目页专有） */
         const cursorDot = document.querySelector('.cursor-dot');
         const cursorOutline = document.querySelector('.cursor-outline');
         const isMobile = window.matchMedia("(max-width: 768px)").matches;
@@ -902,84 +850,16 @@
             window.addEventListener('mousemove', (e) => {
                 cursorDot.style.left = `${e.clientX}px`;
                 cursorDot.style.top = `${e.clientY}px`;
-                cursorOutline.animate({
-                    left: `${e.clientX}px`,
-                    top: `${e.clientY}px`
-                }, { duration: 500, fill: "forwards" });
+                cursorOutline.animate(
+                    { left: `${e.clientX}px`, top: `${e.clientY}px` },
+                    { duration: 500, fill: "forwards" }
+                );
             });
             document.querySelectorAll('.hover-target, a, button').forEach(el => {
                 el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
                 el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
             });
         }
-
-        // Canvas 粒子背景
-        const canvas = document.getElementById('particles-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * 1 - 0.5;
-                this.color = `rgba(59, 130, 246, ${Math.random() * 0.5 + 0.2})`;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            const count = Math.min(window.innerWidth * window.innerHeight / 10000, 100);
-            for (let i = 0; i < count; i++) particles.push(new Particle());
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach((p, i) => {
-                p.update();
-                p.draw();
-                for (let j = i; j < particles.length; j++) {
-                    const dx = p.x - particles[j].x;
-                    const dy = p.y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 100) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(139, 92, 246, ${1 - dist / 100})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-            });
-            requestAnimationFrame(animate);
-        }
-
-        initParticles();
-        animate();
     </script>
 </body>
 </html>
