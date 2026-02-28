@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -6,217 +6,10 @@
     <title>LLM 应用工程化的几点思考 | 郑梓辉</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <style>
-        :root {
-            --bg-color: #0f172a;
-            --text-color: #e2e8f0;
-            --primary: #3b82f6;
-            --secondary: #8b5cf6;
-            --accent: #06b6d4;
-            --glass-bg: rgba(30, 41, 59, 0.7);
-            --border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            overflow-x: hidden;
-            line-height: 1.8;
-        }
-
-        html { scroll-behavior: smooth; }
-
-        #particles-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%);
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 1.5rem 0;
-            z-index: 100;
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-            background: rgba(15, 23, 42, 0.8);
-        }
-        
-        nav .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            color: transparent;
-            letter-spacing: 1px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 3.5rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-color);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.05rem;
-            transition: 0.3s;
-            letter-spacing: 0.5px;
-        }
-
-        .nav-links a:hover { color: var(--primary); }
-
-        .article-hero {
-            padding: 140px 0 60px;
-            text-align: center;
-        }
-
-        .article-title {
-            font-size: 2.8rem;
-            font-weight: 800;
-            margin-bottom: 1.5rem;
-            line-height: 1.3;
-        }
-
-        .article-meta {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            color: #94a3b8;
-            font-size: 1rem;
-        }
-
-        .article-tag {
-            padding: 6px 16px;
-            background: rgba(251,146,60,0.2);
-            border-radius: 20px;
-            font-size: 0.9rem;
-            color: #fb923c;
-            display: inline-block;
-        }
-
-        .article-content {
-            background: var(--glass-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 4rem;
-            margin-bottom: 4rem;
-            line-height: 2;
-        }
-
-        .article-content h2 {
-            font-size: 1.8rem;
-            margin: 2.5rem 0 1rem;
-            color: var(--accent);
-        }
-
-        .article-content h3 {
-            font-size: 1.4rem;
-            margin: 2rem 0 1rem;
-            color: var(--primary);
-        }
-
-        .article-content p {
-            margin-bottom: 1.5rem;
-            text-align: justify;
-        }
-
-        .article-content ul, .article-content ol {
-            margin-left: 2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .article-content li {
-            margin-bottom: 0.8rem;
-        }
-
-        .article-content code {
-            background: rgba(59,130,246,0.15);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 0.9em;
-            color: #cbd5f5;
-        }
-
-        .article-content pre {
-            background: rgba(0,0,0,0.4);
-            padding: 1.5rem;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 1.5rem 0;
-            border-left: 4px solid var(--primary);
-        }
-
-        .back-link {
-            display: inline-block;
-            margin-bottom: 3rem;
-            color: var(--primary);
-            text-decoration: none;
-            transition: 0.3s;
-            font-weight: 600;
-        }
-
-        .back-link:hover {
-            color: var(--accent);
-        }
-
-        footer {
-            background: rgba(15, 23, 42, 0.8);
-            padding: 2rem 0;
-            text-align: center;
-            border-top: 1px solid var(--border-color);
-        }
-
-        footer p {
-            color: #64748b;
-        }
-
-        footer p:first-child {
-            margin-bottom: 1rem;
-        }
-
-        footer p:last-child {
-            font-size: 0.9rem;
-            color: #475569;
-        }
-
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .article-title { font-size: 1.8rem; }
-            .article-content { padding: 2rem; }
-            .article-meta { flex-direction: column; gap: 0.5rem; }
-        }
-    </style>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/article-common.css">
 </head>
-<body>
+<body class="article-page">
     <canvas id="particles-canvas"></canvas>
 
     <nav>
@@ -235,12 +28,11 @@
     <section class="article-hero">
         <div class="container">
             <a href="blog.html" class="back-link"><i class="fas fa-arrow-left"></i> 返回博客</a>
-            <span class="article-tag">AI工程</span>
+            <span class="article-tag tag-orange">AI工程</span>
             <h1 class="article-title">LLM 应用工程化的几点思考</h1>
             <div class="article-meta">
                 <span><i class="far fa-calendar"></i> 2025-09-20</span>
                 <span><i class="fas fa-user"></i> 郑梓辉</span>
-                <span><i class="far fa-eye"></i> 3.2k</span>
             </div>
         </div>
     </section>
@@ -389,87 +181,13 @@ async function robustLLMCall(prompt, retries = 3) {
         </div>
     </article>
 
-    <footer>
+    <footer class="site-footer">
         <div class="container">
-            <p><i class="fas fa-code"></i> 用心编码，创造价值</p>
-            <p>&copy; 2025 Zheng Zihui. All rights reserved.</p>
+            <p><i class="fas fa-code"></i> 用工程化手段让 AI 落地</p>
+            <p>&copy; 2025 Zihui Zheng. Built with passion.</p>
         </div>
     </footer>
 
-    <script>
-        const canvas = document.getElementById('particles-canvas');
-        const ctx = canvas.getContext('2d');
-        
-        let particles = [];
-        
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * 1 - 0.5;
-                this.color = `rgba(59, 130, 246, ${Math.random() * 0.5 + 0.2})`;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            const particleCount = Math.min(window.innerWidth * window.innerHeight / 10000, 100);
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            particles.forEach((p, index) => {
-                p.update();
-                p.draw();
-                
-                for (let j = index; j < particles.length; j++) {
-                    const dx = p.x - particles[j].x;
-                    const dy = p.y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance < 100) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(139, 92, 246, ${1 - distance/100})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-            });
-            requestAnimationFrame(animate);
-        }
-
-        initParticles();
-        animate();
-    </script>
+    <script src="js/common.js"></script>
 </body>
 </html>

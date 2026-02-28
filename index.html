@@ -370,20 +370,19 @@
             margin-bottom: 1rem;
         }
 
-        /* 技能条 */
-        .skill-item { margin-bottom: 1.5rem; }
-        .skill-info { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
-        .progress-bar {
-            height: 8px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 4px;
-            overflow: hidden;
+        /* 技术标签云 */
+        .tech-tag {
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            transition: background 0.2s, border-color 0.2s;
         }
-        .progress {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--primary));
-            width: 0;
-            transition: width 1.5s ease;
+        .tech-tag:hover {
+            background: rgba(59, 130, 246, 0.12);
+            border-color: var(--primary);
         }
 
         /* 移动端适配 */
@@ -465,7 +464,7 @@
             <a href="https://github.com/kokomi1234/AI-hallucination" class="card hover-target" style="text-decoration: none; color: inherit; display: block;">
                 <div class="img-placeholder"><i class="fas fa-spider"></i></div>
                 <h3>广东高校数据采集与分析</h3>
-                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">覆盖全省高校的教研数据抓取、清洗与特征化，搭建高可靠知识底座，为指标监测与策略洞察提供实时支持。</p>
+                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">从广东各高校网站抓取教研数据，用 Playwright 处理动态页面，Airflow 调度日常任务，最终接入 Superset 做可视化看板。</p>
                 <div style="margin-top:1rem; display:flex; gap:0.5rem; flex-wrap: wrap;">
                     <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Python</span>
                     <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">Playwright / Scrapy</span>
@@ -490,7 +489,7 @@
             <a href="project-chat.html" class="card hover-target" style="text-decoration: none; color: inherit; display: block;">
                 <div class="img-placeholder"><i class="fas fa-bolt"></i></div>
                 <h3>AI 工程工具链</h3>
-                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">搭建 LLM 应用脚手架，涵盖数据飞轮、Agent 工具编排与服务监控，用工程化手段让模型稳定上线。</p>
+                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">个人实践的 LLM 应用工具链：FastAPI 做服务、LangChain 编排 Agent、加上日志和指标监控，方便调试和复现。</p>
                 <div style="margin-top:1rem; display:flex; gap:0.5rem;">
                     <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">FastAPI</span>
                     <span style="padding:2px 8px; background:rgba(59,130,246,0.2); border-radius:4px; font-size:12px; color:var(--primary)">LangChain</span>
@@ -500,25 +499,62 @@
         </div>
     </section>
 
-    <!-- 6. 技能部分 -->
+    <!-- 6. 技术栈 -->
     <section id="about" class="container">
         <h2 class="section-title">技术栈</h2>
-        <div class="card" style="max-width: 800px; margin: 0 auto; text-align: center;">
-            <div class="skill-item">
-                <div class="skill-info"><span>AI Agent / RAG / Multi-Agent 系统</span><span>90%</span></div>
-                <div class="progress-bar"><div class="progress" style="width: 0%" data-width="90%"></div></div>
+        <div class="card" style="max-width: 800px; margin: 0 auto; padding: 2.5rem;">
+            <!-- AI / Agent -->
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1rem; color: var(--accent); margin-bottom: 0.8rem; font-weight: 600;">
+                    <i class="fas fa-robot" style="margin-right: 6px;"></i>AI &amp; Agent
+                </h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <span class="tech-tag">Spring AI Alibaba</span>
+                    <span class="tech-tag">RAG / Hybrid Search</span>
+                    <span class="tech-tag">Multi-Agent</span>
+                    <span class="tech-tag">LangChain</span>
+                    <span class="tech-tag">Milvus</span>
+                    <span class="tech-tag">Elasticsearch</span>
+                </div>
             </div>
-            <div class="skill-item">
-                <div class="skill-info"><span>Python / 爬虫与数据采集</span><span>92%</span></div>
-                <div class="progress-bar"><div class="progress" style="width: 0%" data-width="92%"></div></div>
+            <!-- 后端 -->
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: 0.8rem; font-weight: 600;">
+                    <i class="fas fa-server" style="margin-right: 6px;"></i>后端 &amp; 工程
+                </h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <span class="tech-tag">Java 17</span>
+                    <span class="tech-tag">Spring Boot</span>
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">FastAPI</span>
+                    <span class="tech-tag">MySQL / Redis</span>
+                    <span class="tech-tag">Docker</span>
+                </div>
             </div>
-            <div class="skill-item">
-                <div class="skill-info"><span>Java / Spring Boot / Spring AI</span><span>85%</span></div>
-                <div class="progress-bar"><div class="progress" style="width: 0%" data-width="85%"></div></div>
+            <!-- 数据 & 爬虫 -->
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1rem; color: var(--green); margin-bottom: 0.8rem; font-weight: 600;">
+                    <i class="fas fa-spider" style="margin-right: 6px;"></i>数据采集 &amp; 分析
+                </h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <span class="tech-tag">Playwright / Scrapy</span>
+                    <span class="tech-tag">Crawl4AI</span>
+                    <span class="tech-tag">Airflow</span>
+                    <span class="tech-tag">Pandas / DuckDB</span>
+                    <span class="tech-tag">Superset</span>
+                </div>
             </div>
-            <div class="skill-item">
-                <div class="skill-info"><span>算子优化 / CUDA / Triton</span><span>80%</span></div>
-                <div class="progress-bar"><div class="progress" style="width: 0%" data-width="80%"></div></div>
+            <!-- 底层优化 -->
+            <div>
+                <h3 style="font-size: 1rem; color: var(--secondary); margin-bottom: 0.8rem; font-weight: 600;">
+                    <i class="fas fa-microchip" style="margin-right: 6px;"></i>算子 &amp; 系统
+                </h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <span class="tech-tag">CUDA / Triton</span>
+                    <span class="tech-tag">C++ / Scheme</span>
+                    <span class="tech-tag">Qt</span>
+                    <span class="tech-tag">Linux</span>
+                </div>
             </div>
         </div>
     </section>
@@ -538,7 +574,6 @@
                     <p style="color: #94a3b8; font-size: 0.9rem;">从 Playwright 反爬到 Airflow 调度的全链路经验，涵盖日志追踪、重试策略与数据质量校验。</p>
                     <div style="margin-top: 1rem; color: #64748b; font-size: 0.85rem;">
                         <i class="far fa-calendar"></i> 2025-12-02
-                        <span style="margin-left: 1rem;"><i class="far fa-eye"></i> 1.3k</span>
                     </div>
                 </div>
             </a>
@@ -554,7 +589,6 @@
                     <p style="color: #94a3b8; font-size: 0.9rem;">记录带宽/算力瓶颈的定位过程，梳理 CUDA/Triton 优化的对比与 profiling 策略。</p>
                     <div style="margin-top: 1rem; color: #64748b; font-size: 0.85rem;">
                         <i class="far fa-calendar"></i> 2025-11-10
-                        <span style="margin-left: 1rem;"><i class="far fa-eye"></i> 980</span>
                     </div>
                 </div>
             </a>
@@ -570,7 +604,6 @@
                     <p style="color: #94a3b8; font-size: 0.9rem;">讲清楚 tab 循环、图片插入与删除逻辑的边界处理，以及如何提升编辑体验稳定性。</p>
                     <div style="margin-top: 1rem; color: #64748b; font-size: 0.85rem;">
                         <i class="far fa-calendar"></i> 2025-10-01
-                        <span style="margin-left: 1rem;"><i class="far fa-eye"></i> 1.6k</span>
                     </div>
                 </div>
             </a>
@@ -727,20 +760,6 @@
 
         initParticles();
         animate();
-
-        // 3. 简单的滚动动画 (IntersectionObserver)
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // 如果是进度条
-                    if (entry.target.classList.contains('progress')) {
-                        entry.target.style.width = entry.target.getAttribute('data-width');
-                    }
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.progress').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
