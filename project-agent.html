@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperBizAgent — 智能运维 Agent 平台 | blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #e2e8f0;
+            --primary: #3b82f6;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --green: #10b981;
+            --amber: #f59e0b;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        #particles-canvas {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%);
+        }
+
+        .cursor-dot, .cursor-outline {
+            position: fixed; top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%; z-index: 9999;
+            pointer-events: none;
+        }
+        .cursor-dot { width: 8px; height: 8px; background: var(--accent); }
+        .cursor-outline {
+            width: 40px; height: 40px;
+            border: 2px solid var(--primary);
+            transition: width 0.2s, height 0.2s, background 0.2s;
+        }
+        body.hover-active .cursor-outline {
+            width: 70px; height: 70px;
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--secondary);
+            backdrop-filter: blur(2px);
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        /* Nav */
+        nav {
+            position: fixed; top: 0; width: 100%;
+            padding: 1.5rem 0; z-index: 100;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(15, 23, 42, 0.8);
+        }
+        nav .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo {
+            font-size: 1.8rem; font-weight: 800;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text; color: transparent;
+            letter-spacing: 1px;
+        }
+        .nav-links { display: flex; gap: 3.5rem; list-style: none; }
+        .nav-links a {
+            color: var(--text-color); text-decoration: none;
+            font-weight: 600; font-size: 1.05rem;
+            transition: 0.3s; letter-spacing: 0.5px;
+        }
+        .nav-links a:hover { color: var(--primary); }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            margin-top: 100px; padding: 1rem 0;
+            color: #94a3b8; font-size: 0.9rem;
+        }
+        .breadcrumb a { color: var(--accent); text-decoration: none; }
+        .breadcrumb a:hover { color: var(--primary); }
+
+        /* Hero */
+        .project-hero {
+            padding: 2rem 0 3rem;
+            text-align: center;
+            position: relative;
+        }
+        .project-hero::after {
+            content: '';
+            position: absolute; bottom: 0; left: 10%; right: 10%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--border-color), transparent);
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 18px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 50px; color: var(--green);
+            font-size: 0.85rem; font-weight: 600;
+            margin-bottom: 1.5rem;
+            animation: badge-glow 3s ease-in-out infinite;
+        }
+        @keyframes badge-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.2); }
+            50% { box-shadow: 0 0 20px 4px rgba(16, 185, 129, 0.1); }
+        }
+        .project-hero h1 {
+            font-size: 3.2rem; margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent), var(--secondary));
+            -webkit-background-clip: text; color: transparent;
+            line-height: 1.2;
+        }
+        .project-hero .subtitle {
+            font-size: 1.15rem; color: #94a3b8;
+            max-width: 750px; margin: 0 auto 2rem;
+            line-height: 1.8;
+        }
+        .hero-tags {
+            display: flex; gap: 0.7rem;
+            justify-content: center; flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        .hero-tags .tag {
+            padding: 6px 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px; font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        .hero-tags .tag:hover {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        .hero-actions {
+            display: flex; gap: 1rem;
+            justify-content: center; flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 28px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white; text-decoration: none;
+            border-radius: 50px; font-weight: bold;
+            transition: transform 0.3s; border: none;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3); }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+        }
+        .btn-outline:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        /* Section heading */
+        .section-heading {
+            font-size: 1.8rem; font-weight: 700;
+            margin: 3.5rem 0 1.5rem;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .section-heading i {
+            font-size: 1.4rem; color: var(--accent);
+        }
+        .section-heading::after {
+            content: '';
+            flex: 1; height: 1px;
+            background: linear-gradient(to right, var(--border-color), transparent);
+            margin-left: 12px;
+        }
+
+        /* Card */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 2rem;
+            margin: 1.5rem 0;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.25);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        /* Architecture diagram (ASCII → styled) */
+        .arch-diagram {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+        .arch-layers { display: flex; flex-direction: column; gap: 1.2rem; }
+        .arch-layer {
+            display: flex; align-items: center; gap: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border-left: 3px solid;
+            transition: all 0.3s;
+        }
+        .arch-layer:hover {
+            transform: translateX(8px);
+        }
+        .arch-layer.frontend {
+            background: rgba(59, 130, 246, 0.08);
+            border-color: var(--primary);
+        }
+        .arch-layer.backend {
+            background: rgba(139, 92, 246, 0.08);
+            border-color: var(--secondary);
+        }
+        .arch-layer.search {
+            background: rgba(6, 182, 212, 0.08);
+            border-color: var(--accent);
+        }
+        .arch-layer.agent {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: var(--green);
+        }
+        .arch-layer.infra {
+            background: rgba(245, 158, 11, 0.08);
+            border-color: var(--amber);
+        }
+        .arch-layer-icon {
+            width: 42px; height: 42px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; flex-shrink: 0;
+        }
+        .frontend .arch-layer-icon { background: rgba(59, 130, 246, 0.2); color: var(--primary); }
+        .backend .arch-layer-icon { background: rgba(139, 92, 246, 0.2); color: var(--secondary); }
+        .search .arch-layer-icon { background: rgba(6, 182, 212, 0.2); color: var(--accent); }
+        .agent .arch-layer-icon { background: rgba(16, 185, 129, 0.2); color: var(--green); }
+        .infra .arch-layer-icon { background: rgba(245, 158, 11, 0.2); color: var(--amber); }
+        .arch-layer-content h4 { font-size: 1rem; margin-bottom: 0.25rem; }
+        .arch-layer-content p { font-size: 0.85rem; color: #94a3b8; }
+        .arch-arrow {
+            text-align: center; font-size: 1.2rem;
+            color: #475569; margin: -0.4rem 0;
+        }
+
+        /* Pipeline */
+        .pipeline {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+        .pipeline-step {
+            flex: 1;
+            min-width: 160px;
+            padding: 1.2rem 1rem;
+            text-align: center;
+            position: relative;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+        .pipeline-step:first-child { border-radius: 12px 0 0 12px; }
+        .pipeline-step:last-child { border-radius: 0 12px 12px 0; }
+        .pipeline-step:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -12px; top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: var(--accent);
+            z-index: 2;
+            background: var(--bg-color);
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid var(--border-color);
+        }
+        .pipeline-step:hover {
+            border-color: var(--accent);
+            background: rgba(6, 182, 212, 0.05);
+        }
+        .pipeline-step .step-num {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white; font-size: 0.8rem; font-weight: 700;
+            margin-bottom: 0.6rem;
+        }
+        .pipeline-step h4 { font-size: 0.9rem; margin-bottom: 0.3rem; }
+        .pipeline-step p { font-size: 0.78rem; color: #94a3b8; }
+
+        /* Agent workflow */
+        .agent-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        .agent-node {
+            padding: 1.2rem 1.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            text-align: center;
+            min-width: 140px;
+            transition: all 0.3s;
+        }
+        .agent-node:hover {
+            transform: translateY(-4px);
+            border-color: var(--green);
+        }
+        .agent-node i { font-size: 1.5rem; margin-bottom: 0.5rem; display: block; }
+        .agent-node.supervisor i { color: var(--amber); }
+        .agent-node.planner i { color: var(--primary); }
+        .agent-node.executor i { color: var(--green); }
+        .agent-node h4 { font-size: 0.95rem; }
+        .agent-node p { font-size: 0.8rem; color: #94a3b8; }
+        .agent-arrow { font-size: 1.4rem; color: #475569; }
+
+        /* Feature grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
+        .feature-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+        .feature-item:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+        .feature-item i {
+            font-size: 1.8rem;
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+        .feature-item:nth-child(1) i { color: var(--primary); }
+        .feature-item:nth-child(2) i { color: var(--accent); }
+        .feature-item:nth-child(3) i { color: var(--green); }
+        .feature-item:nth-child(4) i { color: var(--amber); }
+        .feature-item h3 { font-size: 1.05rem; margin-bottom: 0.4rem; }
+        .feature-item p { font-size: 0.88rem; color: #94a3b8; line-height: 1.6; }
+
+        /* Tech table */
+        .tech-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        .tech-table th, .tech-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+        .tech-table th {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .tech-table td { color: #cbd5e1; }
+        .tech-table tr:hover td { background: rgba(59, 130, 246, 0.03); }
+        .tech-table .tech-name { color: var(--text-color); font-weight: 500; }
+
+        /* Decision cards */
+        .decision-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
+        .decision-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+        .decision-card:hover {
+            border-color: var(--secondary);
+            transform: translateY(-3px);
+        }
+        .decision-card h4 {
+            font-size: 0.95rem;
+            color: var(--accent);
+            margin-bottom: 0.6rem;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .decision-card .choice {
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+        }
+        .decision-card .reason {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        /* Tool list */
+        .tool-list { display: flex; flex-direction: column; gap: 0.8rem; margin: 1.5rem 0; }
+        .tool-item {
+            display: flex; align-items: center; gap: 1rem;
+            padding: 1rem 1.2rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        .tool-item:hover {
+            border-color: var(--primary);
+            transform: translateX(6px);
+        }
+        .tool-icon {
+            width: 38px; height: 38px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            font-size: 1rem;
+        }
+        .tool-icon.blue { background: rgba(59, 130, 246, 0.2); color: var(--primary); }
+        .tool-icon.cyan { background: rgba(6, 182, 212, 0.2); color: var(--accent); }
+        .tool-icon.green { background: rgba(16, 185, 129, 0.2); color: var(--green); }
+        .tool-icon.amber { background: rgba(245, 158, 11, 0.2); color: var(--amber); }
+        .tool-icon.purple { background: rgba(139, 92, 246, 0.2); color: var(--secondary); }
+        .tool-item-content h4 { font-size: 0.9rem; margin-bottom: 0.15rem; }
+        .tool-item-content p { font-size: 0.8rem; color: #94a3b8; }
+        .tool-trigger {
+            margin-left: auto;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.72rem;
+            font-weight: 500;
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--secondary);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            white-space: nowrap;
+        }
+
+        /* Highlight box */
+        .highlight-box {
+            background: rgba(16, 185, 129, 0.06);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 1.5rem 0;
+        }
+        .highlight-box h4 {
+            color: var(--green);
+            margin-bottom: 0.8rem;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .highlight-box p, .highlight-box li {
+            font-size: 0.92rem;
+            color: #94a3b8;
+            line-height: 1.7;
+        }
+        .highlight-box ul {
+            list-style: none;
+            margin-top: 0.5rem;
+        }
+        .highlight-box li {
+            padding: 0.3rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .highlight-box li::before {
+            content: '→';
+            position: absolute; left: 0;
+            color: var(--green);
+        }
+
+        /* Scenario */
+        .scenario {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 1rem 0;
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            line-height: 2;
+            color: #94a3b8;
+            overflow-x: auto;
+        }
+        .scenario .user { color: var(--primary); font-weight: 600; }
+        .scenario .system { color: var(--accent); }
+        .scenario .tool { color: var(--amber); }
+        .scenario .result { color: var(--green); }
+
+        /* Back link */
+        .back-section {
+            text-align: center;
+            padding: 3rem 0 5rem;
+        }
+
+        @media (max-width: 768px) {
+            .project-hero h1 { font-size: 2rem; }
+            .cursor-dot, .cursor-outline { display: none; }
+            * { cursor: auto; }
+            .nav-links { display: none; }
+            .pipeline { flex-direction: column; }
+            .pipeline-step { border-radius: 12px !important; }
+            .pipeline-step:not(:last-child)::after { display: none; }
+            .agent-flow { flex-direction: column; }
+            .agent-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+    <canvas id="particles-canvas"></canvas>
+
+    <nav>
+        <div class="container">
+            <div class="logo"><i class="fas fa-code"></i> blog</div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="hover-target">首页</a></li>
+                <li><a href="index.html#projects" class="hover-target">项目</a></li>
+                <li><a href="index.html#blog" class="hover-target">博客</a></li>
+                <li><a href="index.html#about" class="hover-target">关于</a></li>
+                <li><a href="index.html#contact" class="hover-target">联系</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html" class="hover-target"><i class="fas fa-home"></i> 首页</a> / 
+            <a href="index.html#projects" class="hover-target">项目</a> / 
+            <span>SuperBizAgent</span>
+        </div>
+
+        <!-- Hero -->
+        <section class="project-hero">
+            <div class="hero-badge">
+                <i class="fas fa-robot"></i> AI Agent · 独立完成
+            </div>
+            <h1>SuperBizAgent</h1>
+            <p class="subtitle">
+                基于 Spring AI Alibaba 构建的智能运维 Agent 平台，
+                通过 <strong style="color: var(--accent);">Hybrid Search + Reranker 四阶段混合检索</strong> 和
+                <strong style="color: var(--green);">Supervisor-Planner-Executor 三层 Agent 协作</strong>，
+                实现 RAG 知识库问答与自动化告警根因分析。
+            </p>
+            <div class="hero-tags">
+                <span class="tag"><i class="fab fa-java"></i> Java 17</span>
+                <span class="tag"><i class="fas fa-leaf"></i> Spring Boot 3.2</span>
+                <span class="tag"><i class="fas fa-robot"></i> Spring AI Alibaba</span>
+                <span class="tag"><i class="fas fa-brain"></i> qwen3-max</span>
+                <span class="tag"><i class="fas fa-database"></i> Milvus</span>
+                <span class="tag"><i class="fab fa-docker"></i> Docker Compose</span>
+            </div>
+            <div class="hero-actions">
+                <a href="https://github.com/kokomi1234" class="btn hover-target" target="_blank">
+                    <i class="fab fa-github"></i> 查看源码
+                </a>
+                <a href="#architecture" class="btn btn-outline hover-target">
+                    <i class="fas fa-sitemap"></i> 技术架构
+                </a>
+            </div>
+        </section>
+
+        <!-- 系统架构 -->
+        <h2 class="section-heading" id="architecture"><i class="fas fa-sitemap"></i> 系统架构</h2>
+        <div class="arch-diagram">
+            <div class="arch-layers">
+                <div class="arch-layer frontend">
+                    <div class="arch-layer-icon"><i class="fas fa-desktop"></i></div>
+                    <div class="arch-layer-content">
+                        <h4>Frontend — HTML / JS</h4>
+                        <p>SSE 流式渲染 · Markdown 实时预览 · 多会话管理</p>
+                    </div>
+                </div>
+                <div class="arch-arrow">↕ HTTP / SSE</div>
+                <div class="arch-layer backend">
+                    <div class="arch-layer-icon"><i class="fas fa-server"></i></div>
+                    <div class="arch-layer-content">
+                        <h4>Spring Boot 3.2 — ChatController (SSE) / FileUploadController</h4>
+                        <p>ReactAgent (ReAct) · 5 个 @Tool · Function Calling 自主决策</p>
+                    </div>
+                </div>
+                <div class="arch-arrow">↕</div>
+                <div class="arch-layer search">
+                    <div class="arch-layer-icon"><i class="fas fa-search"></i></div>
+                    <div class="arch-layer-content">
+                        <h4>HybridSearchService — 四阶段混合检索流水线</h4>
+                        <p>Dense Retrieval → BM25 → RRF Fusion → Cross-Encoder Reranker</p>
+                    </div>
+                </div>
+                <div class="arch-arrow">↕</div>
+                <div class="arch-layer agent">
+                    <div class="arch-layer-icon"><i class="fas fa-brain"></i></div>
+                    <div class="arch-layer-content">
+                        <h4>AiOpsService — 多 Agent 协作</h4>
+                        <p>Supervisor → Planner → Executor → 循环迭代 · KnowledgeArchiveService 自动归档</p>
+                    </div>
+                </div>
+                <div class="arch-arrow">↕</div>
+                <div class="arch-layer infra">
+                    <div class="arch-layer-icon"><i class="fas fa-cubes"></i></div>
+                    <div class="arch-layer-content">
+                        <h4>基础设施 — Docker Compose 统一编排</h4>
+                        <p>Milvus 向量数据库 · etcd 元数据 · MinIO 对象存储</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RAG 检索流水线 -->
+        <h2 class="section-heading"><i class="fas fa-search"></i> RAG 混合检索流水线</h2>
+        <p style="color: #94a3b8; margin-bottom: 0.5rem;">
+            在线检索采用 Hybrid Search + Reranker 四阶段流水线，Dense 语义 和 BM25 关键词 互补，RRF 排名融合后经 Cross-Encoder 精排，确保高质量文档召回。
+        </p>
+        <div class="pipeline">
+            <div class="pipeline-step">
+                <div class="step-num">1</div>
+                <h4>Dense Retrieval</h4>
+                <p>Milvus 向量检索 Top-20，捕捉语义相似性</p>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-num">2</div>
+                <h4>BM25 Scoring</h4>
+                <p>应用层关键词打分，精确匹配错误码/专名</p>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-num">3</div>
+                <h4>RRF Fusion</h4>
+                <p>双路排名融合 (k=60)，无需分数归一化</p>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-num">4</div>
+                <h4>Reranker</h4>
+                <p>DashScope gte-rerank Cross-Encoder 精排 Top-3</p>
+            </div>
+        </div>
+        <div class="highlight-box">
+            <h4><i class="fas fa-shield-alt"></i> 全链路三层降级</h4>
+            <ul>
+                <li>Reranker 故障 → 回退到 RRF 融合结果</li>
+                <li>混合检索异常 → 回退到纯向量检索</li>
+                <li>确保服务永远有结果返回</li>
+            </ul>
+        </div>
+
+        <!-- 多 Agent 协作 -->
+        <h2 class="section-heading"><i class="fas fa-users-cog"></i> 多 Agent 自动化告警分析</h2>
+        <div class="agent-flow">
+            <div class="agent-node supervisor">
+                <i class="fas fa-crown"></i>
+                <h4>Supervisor</h4>
+                <p>调度决策</p>
+            </div>
+            <span class="agent-arrow">→</span>
+            <div class="agent-node planner">
+                <i class="fas fa-clipboard-list"></i>
+                <h4>Planner</h4>
+                <p>分析 & 规划</p>
+            </div>
+            <span class="agent-arrow">⇄</span>
+            <div class="agent-node executor">
+                <i class="fas fa-cog"></i>
+                <h4>Executor</h4>
+                <p>执行工具调用</p>
+            </div>
+        </div>
+        <div class="card">
+            <p style="color: #94a3b8; line-height: 2; font-size: 0.95rem;">
+                <strong style="color: var(--text-color);">工作流程</strong>：Supervisor 读取 Prometheus 告警后分派给 Planner 制定排查计划；
+                Executor 按计划执行工具调用（查日志、查文档、查指标）；Planner 根据执行反馈动态再规划；
+                循环迭代直到问题定位完成，最终输出结构化的《告警分析报告》（活跃告警清单、根因分析、处理方案、风险评估）。
+            </p>
+        </div>
+
+        <!-- 核心能力 -->
+        <h2 class="section-heading"><i class="fas fa-star"></i> 核心能力</h2>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <i class="fas fa-search-plus"></i>
+                <h3>RAG 知识库问答</h3>
+                <p>Markdown 标题分片 (800字/片,100字重叠) → text-embedding-v4 向量化 → Milvus IVF_FLAT 索引 → 四阶段混合检索 → LLM 回答</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-network-wired"></i>
+                <h3>多 Agent 运维分析</h3>
+                <p>Supervisor + Planner + Executor 三层协作，端到端完成告警根因分析，职责分离避免单 Agent 走偏</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-recycle"></i>
+                <h3>知识自动闭环</h3>
+                <p>告警解决后报告自动归档 → 同步向量索引入库 → 下次同类问题 RAG 直接命中，知识库自增长</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-stream"></i>
+                <h3>流式对话 & 并发控制</h3>
+                <p>SSE 实时 token 推送 · 线程池异步不阻塞 · ConcurrentHashMap + ReentrantLock 双层并发安全</p>
+            </div>
+        </div>
+
+        <!-- Agent 工具集 -->
+        <h2 class="section-heading"><i class="fas fa-wrench"></i> Agent 工具集</h2>
+        <p style="color: #94a3b8; margin-bottom: 0.5rem; font-size: 0.9rem;">
+            所有工具通过 <code style="color: var(--accent);">@Tool</code> 注解声明，框架自动转为 JSON Schema，LLM 自主决定调用时机。
+        </p>
+        <div class="tool-list">
+            <div class="tool-item">
+                <div class="tool-icon blue"><i class="fas fa-book"></i></div>
+                <div class="tool-item-content">
+                    <h4>InternalDocsTools — 知识库检索</h4>
+                    <p>RAG 混合检索 + Reranker，从知识库返回最相关文档</p>
+                </div>
+                <span class="tool-trigger">Function Calling</span>
+            </div>
+            <div class="tool-item">
+                <div class="tool-icon cyan"><i class="fas fa-bell"></i></div>
+                <div class="tool-item-content">
+                    <h4>QueryMetricsTools — 告警查询</h4>
+                    <p>查询 Prometheus 活跃告警状态和指标数据</p>
+                </div>
+                <span class="tool-trigger">Function Calling</span>
+            </div>
+            <div class="tool-item">
+                <div class="tool-icon green"><i class="fas fa-file-alt"></i></div>
+                <div class="tool-item-content">
+                    <h4>QueryLogsTools — 日志查询</h4>
+                    <p>查询应用日志，支持 MCP 协议远程调用腾讯云 CLS</p>
+                </div>
+                <span class="tool-trigger">Function Calling / MCP</span>
+            </div>
+            <div class="tool-item">
+                <div class="tool-icon amber"><i class="fas fa-clock"></i></div>
+                <div class="tool-item-content">
+                    <h4>DateTimeTools — 时间获取</h4>
+                    <p>获取当前时间，为日志查询和告警定位提供时间上下文</p>
+                </div>
+                <span class="tool-trigger">Function Calling</span>
+            </div>
+            <div class="tool-item">
+                <div class="tool-icon purple"><i class="fas fa-archive"></i></div>
+                <div class="tool-item-content">
+                    <h4>ArchiveTools — 知识归档</h4>
+                    <p>将分析报告和解决方案自动归档到知识库，形成知识闭环</p>
+                </div>
+                <span class="tool-trigger">Function Calling / 自动触发</span>
+            </div>
+        </div>
+
+        <!-- 技术栈 -->
+        <h2 class="section-heading"><i class="fas fa-layer-group"></i> 技术栈</h2>
+        <div class="card">
+            <table class="tech-table">
+                <thead>
+                    <tr>
+                        <th>分类</th>
+                        <th>技术</th>
+                        <th>说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>框架</td>
+                        <td class="tech-name">Java 17 + Spring Boot 3.2</td>
+                        <td>应用基础框架</td>
+                    </tr>
+                    <tr>
+                        <td>AI 框架</td>
+                        <td class="tech-name">Spring AI Alibaba 1.1.0-RC2</td>
+                        <td>ReactAgent · SupervisorAgent · Function Calling</td>
+                    </tr>
+                    <tr>
+                        <td>大模型</td>
+                        <td class="tech-name">DashScope qwen3-max</td>
+                        <td>对话推理与 Function Calling</td>
+                    </tr>
+                    <tr>
+                        <td>向量化</td>
+                        <td class="tech-name">text-embedding-v4 (1024 维)</td>
+                        <td>文本向量化</td>
+                    </tr>
+                    <tr>
+                        <td>重排序</td>
+                        <td class="tech-name">DashScope gte-rerank</td>
+                        <td>Cross-Encoder 精排</td>
+                    </tr>
+                    <tr>
+                        <td>向量数据库</td>
+                        <td class="tech-name">Milvus 2.5.10</td>
+                        <td>向量存储 · ANN 搜索 · IVF_FLAT 索引</td>
+                    </tr>
+                    <tr>
+                        <td>协议</td>
+                        <td class="tech-name">SSE + MCP</td>
+                        <td>流式推送 · 工具标准化调用</td>
+                    </tr>
+                    <tr>
+                        <td>部署</td>
+                        <td class="tech-name">Docker Compose + Makefile</td>
+                        <td>一键初始化（启动 → 等待就绪 → 上传文档）</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 关键设计决策 -->
+        <h2 class="section-heading"><i class="fas fa-chess"></i> 关键设计决策</h2>
+        <div class="decision-grid">
+            <div class="decision-card">
+                <h4><i class="fas fa-random"></i> 混合检索 vs 纯向量</h4>
+                <div class="choice">Dense + BM25 + RRF + Reranker</div>
+                <div class="reason">向量擅长语义匹配，BM25 擅长精确关键词（错误码、专有名词），互补提升召回质量</div>
+            </div>
+            <div class="decision-card">
+                <h4><i class="fas fa-code-branch"></i> 应用层 BM25 vs Milvus 原生</h4>
+                <div class="choice">应用层实现</div>
+                <div class="reason">Milvus SDK V1 API 对原生 BM25 Function 支持不完善，应用层实现更灵活可控</div>
+            </div>
+            <div class="decision-card">
+                <h4><i class="fas fa-users-cog"></i> 多 Agent vs 单 Agent</h4>
+                <div class="choice">Supervisor + Planner + Executor</div>
+                <div class="reason">运维任务复杂度高，单 Agent 易走偏；职责分离更可控、更稳定</div>
+            </div>
+            <div class="decision-card">
+                <h4><i class="fas fa-lock"></i> 并发控制模型</h4>
+                <div class="choice">ConcurrentHashMap + ReentrantLock</div>
+                <div class="reason">Map 层解决多会话并发，Lock 层解决单会话内复合操作原子性</div>
+            </div>
+            <div class="decision-card">
+                <h4><i class="fas fa-fingerprint"></i> 文档分片 ID 策略</h4>
+                <div class="choice">确定性 UUID("路径_序号")</div>
+                <div class="reason">幂等——同一文件同一分片 ID 始终相同，先删后插保证文档更新一致性</div>
+            </div>
+            <div class="decision-card">
+                <h4><i class="fas fa-satellite-dish"></i> SSE vs WebSocket</h4>
+                <div class="choice">SSE 流式推送</div>
+                <div class="reason">单向推送场景，实现更简单，HTTP 协议兼容性更好</div>
+            </div>
+        </div>
+
+        <!-- 真实运行场景 -->
+        <h2 class="section-heading"><i class="fas fa-play-circle"></i> 真实运行场景</h2>
+        
+        <p style="color: #94a3b8; margin-bottom: 0.5rem; font-weight: 500;">对话模式</p>
+        <div class="scenario">
+            <span class="user">用户：</span>CPU使用率过高怎么处理？<br>
+            <span class="system">↓ Agent 决策调用 queryInternalDocs 工具</span><br>
+            <span class="tool">↓ HybridSearch: 向量检索 → BM25 → RRF → Reranker</span><br>
+            <span class="tool">↓ 返回 Top-3 相关文档</span><br>
+            <span class="result">AI：根据知识库，CPU使用率过高时建议：1. 使用 top 命令定位高 CPU 进程...</span>
+        </div>
+
+        <p style="color: #94a3b8; margin: 1.5rem 0 0.5rem; font-weight: 500;">AIOps 运维模式</p>
+        <div class="scenario">
+            <span class="user">触发 /api/ai_ops</span><br>
+            <span class="system">↓ Planner: 读取 Prometheus 告警 → 发现 CPU 告警</span><br>
+            <span class="tool">↓ Executor: 查询日志 → 发现 OOM 异常</span><br>
+            <span class="system">↓ Planner: 再规划 → 需要查知识库排查方案</span><br>
+            <span class="tool">↓ Executor: RAG 检索 → 获取《CPU高负载处理指南》</span><br>
+            <span class="result">↓ Planner: 输出《告警分析报告》</span><br>
+            <span class="result">↓ 报告自动归档到知识库，形成知识闭环</span>
+        </div>
+
+        <!-- 返回 -->
+        <div class="back-section">
+            <a href="index.html#projects" class="btn hover-target">
+                <i class="fas fa-arrow-left"></i> 返回项目列表
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 鼠标跟随
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+        if (!isMobile) {
+            window.addEventListener('mousemove', (e) => {
+                cursorDot.style.left = `${e.clientX}px`;
+                cursorDot.style.top = `${e.clientY}px`;
+                cursorOutline.animate({
+                    left: `${e.clientX}px`,
+                    top: `${e.clientY}px`
+                }, { duration: 500, fill: "forwards" });
+            });
+            document.querySelectorAll('.hover-target, a, button').forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
+            });
+        }
+
+        // Canvas 粒子背景
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.color = `rgba(59, 130, 246, ${Math.random() * 0.5 + 0.2})`;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const count = Math.min(window.innerWidth * window.innerHeight / 10000, 100);
+            for (let i = 0; i < count; i++) particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, i) => {
+                p.update();
+                p.draw();
+                for (let j = i; j < particles.length; j++) {
+                    const dx = p.x - particles[j].x;
+                    const dy = p.y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(139, 92, 246, ${1 - dist / 100})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+
+        initParticles();
+        animate();
+    </script>
+</body>
+</html>

@@ -348,9 +348,20 @@
         .img-placeholder i { font-size: 3rem; color: rgba(255,255,255,0.5); }
         
         /* 第二个项目的占位色 */
-        .card:nth-child(2) .img-placeholder { background: linear-gradient(45deg, #ec4899, #f43f5e); }
+        .card:nth-child(2) .img-placeholder { background: linear-gradient(45deg, #3b82f6, #8b5cf6); }
         /* 第三个项目的占位色 */
-        .card:nth-child(3) .img-placeholder { background: linear-gradient(45deg, #10b981, #06b6d4); }
+        .card:nth-child(3) .img-placeholder { background: linear-gradient(45deg, #ec4899, #f43f5e); }
+        /* 第四个项目的占位色 */
+        .card:nth-child(4) .img-placeholder { background: linear-gradient(45deg, #f59e0b, #ef4444); }
+
+        /* 精选项目卡片 glow */
+        .card.featured-card {
+            border: 1px solid rgba(16,185,129,0.35);
+        }
+        .card.featured-card:hover {
+            border-color: rgba(16,185,129,0.6);
+            box-shadow: 0 20px 40px rgba(16,185,129,0.15), 0 20px 40px rgba(0,0,0,0.3);
+        }
 
         .section-title {
             text-align: center;
@@ -412,11 +423,15 @@
             <div class="content" style="text-align: center;">
                 <h1 class="reveal-text">
                     你好，我是郑梓辉<br>
-                    <span style="color: var(--accent)">Python / AI 工程师</span>
+                    <span style="color: var(--accent)">AI / Agent 工程师</span>
                 </h1>
                 <div class="avatar-wrap reveal-text">
                     <img src="images/avatar.jpg" alt="Zheng Zihui" class="avatar-img">
                 </div>
+                <p style="color: #64748b; font-size: 0.95rem; max-width: 520px; margin: 0 auto 2rem; line-height: 1.7;">
+                    专注 RAG 检索增强、Multi-Agent 系统、数据采集与算子优化<br>
+                    用工程化手段让 AI 真正落地
+                </p>
                 <div style="display: flex; gap: 1rem; justify-content: center;">
                     <a href="#projects" class="btn hover-target">查看作品</a>
                     <a href="#contact" class="btn hover-target" style="background: transparent; border: 1px solid var(--primary);">联系我</a>
@@ -429,6 +444,23 @@
     <section id="projects" class="container">
         <h2 class="section-title">项目</h2>
         <div class="grid-3">
+            <!-- 项目 0: SuperBizAgent (置顶 / 精选) -->
+            <a href="project-agent.html" class="card hover-target" style="text-decoration: none; color: inherit; display: block; border: 1px solid rgba(16,185,129,0.35); position: relative;">
+                <div style="position:absolute; top:12px; right:12px; padding:3px 10px; background:rgba(16,185,129,0.18); border:1px solid rgba(16,185,129,0.3); border-radius:12px; font-size:11px; color:#10b981; font-weight:600; display:flex; align-items:center; gap:4px;">
+                    <i class="fas fa-robot" style="font-size:10px;"></i> Agent 项目
+                </div>
+                <div class="img-placeholder" style="background: linear-gradient(135deg, #10b981, #06b6d4);"><i class="fas fa-robot"></i></div>
+                <h3>SuperBizAgent — 智能运维 Agent</h3>
+                <p style="color: #94a3b8; margin: 10px 0; font-size: 0.9rem;">基于 Spring AI Alibaba 的智能运维平台，Hybrid Search + Reranker 四阶段混合检索 + Supervisor-Planner-Executor 三层 Agent 协作，实现 RAG 问答与自动化告警分析。</p>
+                <div style="margin-top:1rem; display:flex; gap:0.5rem; flex-wrap: wrap;">
+                    <span style="padding:2px 8px; background:rgba(16,185,129,0.2); border-radius:4px; font-size:12px; color:#10b981">Java 17</span>
+                    <span style="padding:2px 8px; background:rgba(16,185,129,0.2); border-radius:4px; font-size:12px; color:#10b981">Spring AI</span>
+                    <span style="padding:2px 8px; background:rgba(16,185,129,0.2); border-radius:4px; font-size:12px; color:#10b981">Milvus</span>
+                    <span style="padding:2px 8px; background:rgba(16,185,129,0.2); border-radius:4px; font-size:12px; color:#10b981">RAG</span>
+                    <span style="padding:2px 8px; background:rgba(16,185,129,0.2); border-radius:4px; font-size:12px; color:#10b981">Multi-Agent</span>
+                </div>
+            </a>
+
             <!-- 项目 1 -->
             <a href="https://github.com/kokomi1234/AI-hallucination" class="card hover-target" style="text-decoration: none; color: inherit; display: block;">
                 <div class="img-placeholder"><i class="fas fa-spider"></i></div>
@@ -473,12 +505,16 @@
         <h2 class="section-title">技术栈</h2>
         <div class="card" style="max-width: 800px; margin: 0 auto; text-align: center;">
             <div class="skill-item">
+                <div class="skill-info"><span>AI Agent / RAG / Multi-Agent 系统</span><span>90%</span></div>
+                <div class="progress-bar"><div class="progress" style="width: 0%" data-width="90%"></div></div>
+            </div>
+            <div class="skill-item">
                 <div class="skill-info"><span>Python / 爬虫与数据采集</span><span>92%</span></div>
                 <div class="progress-bar"><div class="progress" style="width: 0%" data-width="92%"></div></div>
             </div>
             <div class="skill-item">
-                <div class="skill-info"><span>AI / LLM 应用工程化</span><span>88%</span></div>
-                <div class="progress-bar"><div class="progress" style="width: 0%" data-width="88%"></div></div>
+                <div class="skill-info"><span>Java / Spring Boot / Spring AI</span><span>85%</span></div>
+                <div class="progress-bar"><div class="progress" style="width: 0%" data-width="85%"></div></div>
             </div>
             <div class="skill-item">
                 <div class="skill-info"><span>算子优化 / CUDA / Triton</span><span>80%</span></div>
@@ -573,10 +609,10 @@
     <footer style="background: rgba(15, 23, 42, 0.8); padding: 2rem 0; text-align: center; border-top: 1px solid var(--border-color);">
         <div class="container">
             <p style="color: #64748b; margin-bottom: 1rem;">
-                <i class="fas fa-code"></i> 用心编码，创造价值
+                <i class="fas fa-code"></i> 用工程化手段让 AI 落地
             </p>
             <p style="color: #475569; font-size: 0.9rem;">
-                &copy; 2024 DevBlog. All rights reserved.
+                &copy; 2025 Zihui Zheng. Built with passion.
             </p>
         </div>
     </footer>
