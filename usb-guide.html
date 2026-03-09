@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="U盘使用说明书 — 各品牌手机操作教程视频合集">
+    <title>U盘使用说明书</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        .guide-section {
+            padding: 120px 0 60px;
+            text-align: center;
+        }
+        .guide-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        .guide-subtitle {
+            font-size: 0.95rem;
+            color: #64748b;
+            margin-bottom: 2.5rem;
+        }
+
+        /* 列表容器 */
+        .guide-list {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: var(--glass-bg);
+        }
+
+        .guide-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background 0.2s;
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        .guide-item:last-child {
+            border-bottom: none;
+        }
+        .guide-item:hover {
+            background: rgba(59, 130, 246, 0.08);
+        }
+        .guide-item .item-number {
+            color: #64748b;
+            margin-right: 1rem;
+            min-width: 2rem;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+        .guide-item .item-title {
+            flex: 1;
+            text-align: left;
+        }
+        .guide-item .item-arrow {
+            color: #475569;
+            font-size: 0.8rem;
+            margin-left: 1rem;
+        }
+
+        /* 高速播放按钮 */
+        .speed-btn {
+            display: block;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: #fff;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .speed-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.35);
+        }
+
+        /* 视频弹窗 */
+        .video-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .video-overlay.active {
+            display: flex;
+        }
+        .video-wrapper {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+        }
+        .video-wrapper video {
+            width: 100%;
+            border-radius: 12px;
+            outline: none;
+        }
+        .video-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 4px 10px;
+            transition: color 0.2s;
+        }
+        .video-close:hover {
+            color: var(--primary);
+        }
+        .video-error {
+            color: #f87171;
+            text-align: center;
+            padding: 2rem;
+            font-size: 1rem;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .guide-title { font-size: 1.6rem; }
+            .guide-item { padding: 0.85rem 1rem; font-size: 0.95rem; }
+            .speed-btn { font-size: 0.95rem; margin: 0 1rem 3rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 动态粒子背景 -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- 导航栏 -->
+    <nav>
+        <div class="container">
+            <div class="logo"><i class="fas fa-code"></i> blog</div>
+            <ul class="nav-links">
+                <li><a href="index.html#home">首页</a></li>
+                <li><a href="index.html#projects">项目</a></li>
+                <li><a href="blog.html">博客</a></li>
+                <li><a href="usb-guide.html">演示</a></li>
+                <li><a href="index.html#about">关于</a></li>
+                <li><a href="index.html#contact">联系</a></li>
+            </ul>
+            <div class="hamburger" aria-label="菜单" role="button" tabindex="0">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面内容 -->
+    <section class="guide-section">
+        <div class="container">
+            <h1 class="guide-title">U盘使用说明书</h1>
+            <p class="guide-subtitle">点击条目播放对应操作教程视频</p>
+
+            <div class="guide-list">
+                <a class="guide-item" data-video="videos/usb-guide/01-usb-faq.mp4">
+                    <span class="item-number">1：</span>
+                    <span class="item-title">U盘常用-问题解答</span>
+                    <i class="fas fa-play item-arrow"></i>
+                </a>
+                <a class="guide-item" data-video="videos/usb-guide/02-usb-capacity.mp4">
+                    <span class="item-number">2：</span>
+                    <span class="item-title">U盘容量-问题解答</span>
+                    <i class="fas fa-play item-arrow"></i>
+                </a>
+                <a class="guide-item" data-video="videos/usb-guide/03-oppo-vivo-guide.mp4">
+                    <span class="item-number">3：</span>
+                    <span class="item-title">【OPPO/VIVO】手机使用方法</span>
+                    <i class="fas fa-play item-arrow"></i>
+                </a>
+                <a class="guide-item" data-video="videos/usb-guide/04-huawei-xiaomi-guide.mp4">
+                    <span class="item-number">4：</span>
+                    <span class="item-title">【华为/小米】手机使用方法</span>
+                    <i class="fas fa-play item-arrow"></i>
+                </a>
+                <a class="guide-item" data-video="videos/usb-guide/05-oppo-vivo-help.mp4">
+                    <span class="item-number">5：</span>
+                    <span class="item-title">【OPPO/VIVO】看了视频还是不会操作</span>
+                    <i class="fas fa-play item-arrow"></i>
+                </a>
+                <a class="guide-item" data-video="videos/usb-guide/06-huawei-xiaomi-help.mp4">
+                    <span class="item-number">6：</span>
+                    <span class="item-title">【华为/小米】看了视频还是不会操作</span>
+                    <i class="fas fa-play item-arrow"></i>
+                </a>
+                <a class="guide-item" data-video="videos/usb-guide/07-vivo-tutorial.mp4">
+                    <span class="item-number"></span>
+                    <span class="item-title">【视频】VIVO手机-操作教程</span>
+                    <i class="fas fa-play item-arrow"></i>
+                </a>
+                <a class="guide-item" data-video="videos/usb-guide/08-oppo-tutorial.mp4">
+                    <span class="item-number"></span>
+                    <span class="item-title">【视频】OPPO手机-操作教程</span>
+                    <i class="fas fa-play item-arrow"></i>
+                </a>
+                <a class="guide-item" data-video="videos/usb-guide/09-xiaomi-tutorial.mp4">
+                    <span class="item-number"></span>
+                    <span class="item-title">【视频】小米手机-操作教程</span>
+                    <i class="fas fa-play item-arrow"></i>
+                </a>
+                <a class="guide-item" data-video="videos/usb-guide/10-huawei-tutorial.mp4">
+                    <span class="item-number"></span>
+                    <span class="item-title">【视频】华为手机-操作教程</span>
+                    <i class="fas fa-play item-arrow"></i>
+                </a>
+                <a class="guide-item" data-video="videos/usb-guide/11-download-music-video.mp4">
+                    <span class="item-number"></span>
+                    <span class="item-title">【视频】下载音乐视频-操作教程</span>
+                    <i class="fas fa-play item-arrow"></i>
+                </a>
+                <a class="guide-item" data-video="videos/usb-guide/12-iphone-tutorial.mp4">
+                    <span class="item-number"></span>
+                    <span class="item-title">苹果15-16-17使用教程【视频教程】</span>
+                    <i class="fas fa-play item-arrow"></i>
+                </a>
+            </div>
+
+            <a class="speed-btn"
+               href="https://www.bilibili.com/video/BV1xFNGzzErG?vd_source=fb40159e69bb1fc6aba9995623c763e5&spm_id_from=333.788.player.player_end_recommend_autoplay&trackid=web_related_0.router-related-2481894-flpjl.1773056176092.990"
+               target="_blank" rel="noopener noreferrer">
+                以上视频高速播放（加载慢、卡顿点这个）
+            </a>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="site-footer">
+        <p>&copy; 2025 郑梓辉. All rights reserved.</p>
+    </footer>
+
+    <!-- 视频弹窗 -->
+    <div class="video-overlay" id="videoOverlay">
+        <div class="video-wrapper">
+            <button class="video-close" id="videoClose" aria-label="关闭视频">&times;</button>
+            <video id="videoPlayer" controls playsinline>
+                您的浏览器不支持视频播放。
+            </video>
+            <p class="video-error" id="videoError">视频加载失败，请确认视频文件已放入对应文件夹。</p>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+    (function () {
+        const overlay = document.getElementById('videoOverlay');
+        const player = document.getElementById('videoPlayer');
+        const closeBtn = document.getElementById('videoClose');
+        const errorMsg = document.getElementById('videoError');
+
+        // 点击列表项打开视频
+        document.querySelectorAll('.guide-item[data-video]').forEach(function (item) {
+            item.addEventListener('click', function (e) {
+                e.preventDefault();
+                var src = this.getAttribute('data-video');
+                errorMsg.style.display = 'none';
+                player.style.display = '';
+                player.src = src;
+                overlay.classList.add('active');
+                player.play();
+            });
+        });
+
+        // 视频加载失败
+        player.addEventListener('error', function () {
+            player.style.display = 'none';
+            errorMsg.style.display = 'block';
+        });
+
+        // 关闭弹窗
+        function closeVideo() {
+            overlay.classList.remove('active');
+            player.pause();
+            player.removeAttribute('src');
+            player.load();
+            errorMsg.style.display = 'none';
+        }
+
+        closeBtn.addEventListener('click', closeVideo);
+        overlay.addEventListener('click', function (e) {
+            if (e.target === overlay) closeVideo();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && overlay.classList.contains('active')) closeVideo();
+        });
+    })();
+    </script>
+</body>
+</html>
